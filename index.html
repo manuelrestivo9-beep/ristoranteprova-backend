@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prenota un tavolo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --colore-primario: #c17b4e;
+        --colore-primario-scuro: #8f5a37;
+        --colore-sfondo: #faf6f1;
+        --colore-testo: #2c241f;
+        --colore-bordo: #e8ddd0;
+        --colore-attenuato: #948877;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: var(--colore-sfondo);
+        color: var(--colore-testo);
+    }
+
+    .topbar {
+        text-align: center;
+        padding: 30px 20px 20px;
+        background: #ffffff;
+    }
+
+    .brand {
+        font-family: 'Playfair Display', serif;
+        letter-spacing: 4px;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        color: var(--colore-primario-scuro);
+    }
+
+    .brand-line {
+        width: 60px;
+        height: 2px;
+        background: var(--colore-primario);
+        margin: 14px auto 0;
+    }
+
+    main.container {
+        max-width: 620px;
+        margin: 40px auto 70px;
+        padding: 0 20px;
+    }
+
+    .prenota-card {
+        background: #ffffff;
+        border-radius: 18px;
+        box-shadow: 0 20px 45px rgba(60, 40, 20, 0.08);
+        padding: 40px 36px;
+    }
+
+    .prenota-card h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        text-align: center;
+        margin: 0 0 8px;
+    }
+
+    .sottotitolo {
+        text-align: center;
+        color: var(--colore-attenuato);
+        margin: 0 0 32px;
+        font-size: 0.95rem;
+    }
+
+    .campo { margin-bottom: 22px; }
+
+    .campo label {
+        display: block;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--colore-attenuato);
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .campo input,
+    .campo select,
+    .campo textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid var(--colore-bordo);
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.95rem;
+        background: #fdfaf6;
+        transition: border-color .2s, box-shadow .2s;
+    }
+
+    .campo input:focus,
+    .campo select:focus,
+    .campo textarea:focus {
+        outline: none;
+        border-color: var(--colore-primario);
+        box-shadow: 0 0 0 3px rgba(193, 123, 78, 0.15);
+    }
+
+    .campo select:disabled { color: var(--colore-attenuato); }
+
+    .btn-conferma {
+        width: 100%;
+        padding: 14px;
+        background: var(--colore-primario);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background .2s;
+    }
+
+    .btn-conferma:hover { background: var(--colore-primario-scuro); }
+
+    .messaggio { text-align: center; margin-top: 18px; font-weight: 600; min-height: 1.2em; }
+    .messaggio.successo { color: #3f7d4e; }
+    .messaggio.errore { color: #b3452f; }
+
+    /* --- Calendario personalizzato --- */
+    .calendario {
+        border: 1px solid var(--colore-bordo);
+        border-radius: 12px;
+        padding: 16px;
+        background: #fdfaf6;
+    }
+
+    .calendario-placeholder {
+        text-align: center;
+        color: var(--colore-attenuato);
+        font-size: 0.9rem;
+        margin: 8px 0;
+    }
+
+    .calendario-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .calendario-titolo {
+        font-family: 'Playfair Display', serif;
+        font-weight: 600;
+    }
+
+    .nav-mese {
+        background: #fff;
+        border: 1px solid var(--colore-bordo);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        color: var(--colore-primario-scuro);
+        font-size: 0.85rem;
+    }
+
+    .nav-mese:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .calendario-griglia {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+        text-align: center;
+    }
+
+    .giorno-settimana {
+        font-size: 0.68rem;
+        color: var(--colore-attenuato);
+        text-transform: uppercase;
+        padding: 4px 0;
+    }
+
+    .giorno {
+        padding: 8px 0;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        background: transparent;
+        font-size: 0.85rem;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .giorno-disponibile {
+        background: #fff;
+        border-color: var(--colore-bordo);
+        color: var(--colore-testo);
+        cursor: pointer;
+    }
+
+    .giorno-disponibile:hover { border-color: var(--colore-primario); }
+
+    .giorno-disponibile.selezionato {
+        background: var(--colore-primario);
+        color: #fff;
+        border-color: var(--colore-primario);
+    }
+
+    .giorno-non-disponibile {
+        background: #f1ece4;
+        color: #c9beac;
+        cursor: not-allowed;
+        text-decoration: line-through;
+    }
+
+    .calendario-legenda {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-top: 14px;
+        font-size: 0.75rem;
+        color: var(--colore-attenuato);
+    }
+
+    .pallino {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+    .pallino.disponibile { background: #fff; border: 1px solid var(--colore-bordo); }
+    .pallino.non-disponibile { background: #f1ece4; border: 1px solid #ddd0bd; }
+</style>
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="brand">Ristorante &amp; Pizzeria</div>
+        <div class="brand-line"></div>
+    </header>
+
+    <main class="container">
+        <div class="prenota-card">
+            <h1>Prenota un tavolo</h1>
+            <p class="sottotitolo">Scegli l'area, la data e l'orario: ti mostriamo solo la disponibilità reale.</p>
+
+            <form id="form-prenotazione" novalidate>
+                <div class="campo">
+                    <label for="nome">Nome e Cognome</label>
+                    <input type="text" id="nome" required>
+                </div>
+
+                <div class="campo">
+                    <label for="telefono">Numero di Telefono</label>
+                    <input type="tel" id="telefono" required>
+                </div>
+
+                <div class="campo">
+                    <label for="area">Dove preferisci cenare?</label>
+                    <select id="area" required>
+                        <option value="" disabled selected>Seleziona un'opzione...</option>
+                        <option value="Ristorante">Ristorante</option>
+                        <option value="Pizzeria">Pizzeria</option>
+                        <option value="Misto">Tavolo Misto (Ristorante e Pizzeria)</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="coperti">Numero di Persone</label>
+                    <input type="number" id="coperti" min="1" max="40" required>
+                </div>
+
+                <div class="campo">
+                    <label>Data</label>
+                    <div id="calendario" class="calendario">
+                        <p class="calendario-placeholder">Seleziona prima l'area per vedere le date disponibili.</p>
+                    </div>
+                    <input type="hidden" id="data">
+                </div>
+
+                <div class="campo">
+                    <label for="ora">Ora</label>
+                    <select id="ora" required disabled>
+                        <option value="">Seleziona prima una data...</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="note">Richieste particolari (Allergie, Seggiolone, ecc.)</label>
+                    <textarea id="note" rows="2" placeholder="Scrivi qui eventuali necessità..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-conferma">Conferma Prenotazione</button>
+            </form>
+
+            <div id="messaggio" class="messaggio"></div>
+        </div>
+    </main>
+
+    <script>
+        // Nuovo link del server aggiornato
+        const API = 'https://ristorante-server-2iws.onrender.com';
+        
+        const MESI = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+                      "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+        const GIORNI_SETTIMANA = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
+
+        const oggiData = new Date();
+        let stato = {
+            anno: oggiData.getFullYear(),
+            mese: oggiData.getMonth() + 1,
+            giornoSelezionato: null
+        };
+
+        document.getElementById('area').addEventListener('change', () => {
+            stato.giornoSelezionato = null;
+            document.getElementById('data').value = '';
+            resettaOrari('Seleziona prima una data...');
+            caricaCalendario();
+        });
+
+        async function caricaCalendario() {
+            const area = document.getElementById('area').value;
+            const contenitore = document.getElementById('calendario');
+
+            if (!area) {
+                contenitore.innerHTML = '<p class="calendario-placeholder">Seleziona prima l\'area per vedere le date disponibili.</p>';
+                return;
+            }
+
+            contenitore.innerHTML = '<p class="calendario-placeholder">Caricamento date disponibili...</p>';
+
+            try {
+                const risposta = await fetch(`${API}/disponibilita-mese/?anno=${stato.anno}&mese=${stato.mese}&area=${encodeURIComponent(area)}`);
+                const dati = await risposta.json();
+                disegnaCalendario(dati.giorni);
+            } catch (errore) {
+                contenitore.innerHTML = '<p class="calendario-placeholder">Errore di connessione al server.</p>';
+            }
+        }
+
+        function disegnaCalendario(giorni) {
+            const contenitore = document.getElementById('calendario');
+            const meseCorrente = oggiData.getMonth() + 1;
+            const annoCorrente = oggiData.getFullYear();
+            const alMesePassato = (stato.anno < annoCorrente) || (stato.anno === annoCorrente && stato.mese <= meseCorrente);
+
+            const primoGiorno = new Date(stato.anno, stato.mese - 1, 1).getDay();
+            const offset = (primoGiorno + 6) % 7; // Lunedì come primo giorno
+
+            let html = `
+                <div class="calendario-header">
+                    <button type="button" class="nav-mese" id="mese-prec" ${alMesePassato ? 'disabled' : ''}>&#10094;</button>
+                    <span class="calendario-titolo">${MESI[stato.mese - 1]} ${stato.anno}</span>
+                    <button type="button" class="nav-mese" id="mese-succ">&#10095;</button>
+                </div>
+                <div class="calendario-griglia">
+                    ${GIORNI_SETTIMANA.map(g => `<div class="giorno-settimana">${g}</div>`).join('')}
+                    ${'<div></div>'.repeat(offset)}
+                    ${giorni.map(g => {
+                        const numero = parseInt(g.giorno.split('-')[2], 10);
+                        const selezionato = g.giorno === stato.giornoSelezionato ? 'selezionato' : '';
+                        const classe = g.disponibile ? `giorno-disponibile ${selezionato}` : 'giorno-non-disponibile';
+                        return `<button type="button" class="giorno ${classe}" data-giorno="${g.giorno}" ${g.disponibile ? '' : 'disabled'}>${numero}</button>`;
+                    }).join('')}
+                </div>
+                <div class="calendario-legenda">
+                    <span><i class="pallino disponibile"></i>Disponibile</span>
+                    <span><i class="pallino non-disponibile"></i>Completo</span>
+                </div>
+            `;
+
+            contenitore.innerHTML = html;
+
+            document.getElementById('mese-prec').addEventListener('click', () => cambiaMese(-1));
+            document.getElementById('mese-succ').addEventListener('click', () => cambiaMese(1));
+
+            contenitore.querySelectorAll('.giorno-disponibile').forEach(bottone => {
+                bottone.addEventListener('click', () => selezionaGiorno(bottone.dataset.giorno));
+            });
+        }
+
+        function cambiaMese(delta) {
+            stato.mese += delta;
+            if (stato.mese > 12) { stato.mese = 1; stato.anno++; }
+            if (stato.mese < 1) { stato.mese = 12; stato.anno--; }
+            stato.giornoSelezionato = null;
+            document.getElementById('data').value = '';
+            resettaOrari('Seleziona prima una data...');
+            caricaCalendario();
+        }
+
+        async function selezionaGiorno(giorno) {
+            stato.giornoSelezionato = giorno;
+            document.getElementById('data').value = giorno;
+            document.querySelectorAll('.giorno-disponibile').forEach(b => {
+                b.classList.toggle('selezionato', b.dataset.giorno === stato.giornoSelezionato);
+            });
+            await caricaOrari(giorno);
+        }
+
+        function resettaOrari(testoPlaceholder) {
+            const select = document.getElementById('ora');
+            select.innerHTML = `<option value="">${testoPlaceholder}</option>`;
+            select.disabled = true;
+        }
+
+        async function caricaOrari(giorno) {
+            const area = document.getElementById('area').value;
+            const select = document.getElementById('ora');
+            select.innerHTML = '<option value="">Caricamento orari...</option>';
+            select.disabled = true;
+
+            try {
+                const risposta = await fetch(`${API}/disponibilita-giorno/?data=${giorno}&area=${encodeURIComponent(area)}`);
+                const dati = await risposta.json();
+
+                if (dati.chiuso) {
+                    select.innerHTML = '<option value="">Prenotazioni online chiuse per stasera: chiamaci al locale</option>';
+                    select.disabled = true;
+                    return;
+                }
+
+                const pranzo = dati.slot.filter(s => s.ora < "16:00");
+                const cena = dati.slot.filter(s => s.ora >= "16:00");
+
+                function opzioni(lista) {
+                    return lista.map(s => {
+                        let etichetta = s.ora;
+                        if (!s.disponibile) etichetta += ' (completo)';
+                        else if (s.posti_rimasti <= 5) etichetta += ` (ultimi ${s.posti_rimasti} posti)`;
+                        return `<option value="${s.ora}" ${s.disponibile ? '' : 'disabled'}>${etichetta}</option>`;
+                    }).join('');
+                }
+
+                select.innerHTML = `
+                    <option value="" disabled selected>Seleziona un orario...</option>
+                    ${pranzo.length ? `<optgroup label="Pranzo">${opzioni(pranzo)}</optgroup>` : ''}
+                    ${cena.length ? `<optgroup label="Cena">${opzioni(cena)}</optgroup>` : ''}
+                `;
+                select.disabled = false;
+            } catch (errore) {
+                select.innerHTML = '<option value="">Errore di connessione al server.</option>';
+            }
+        }
+
+        document.getElementById('form-prenotazione').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const divMessaggio = document.getElementById('messaggio');
+
+            if (!document.getElementById('data').value) {
+                divMessaggio.className = 'messaggio errore';
+                divMessaggio.innerText = 'Seleziona una data dal calendario.';
+                return;
+            }
+            if (!document.getElementById('ora').value) {
+                divMessaggio.className = 'messaggio errore';
+                divMessaggio.innerText = 'Seleziona un orario disponibile.';
+                return;
+            }
+
+            const dati = {
+                nome_cliente: document.getElementById('nome').value,
+                telefono: document.getElementById('telefono').value,
+                data_prenotazione: document.getElementById('data').value,
+                ora_prenotazione: document.getElementById('ora').value,
+                numero_persone: parseInt(document.getElementById('coperti').value),
+                area: document.getElementById('area').value,
+                note: document.getElementById('note').value
+            };
+
+            try {
+                const risposta = await fetch(`${API}/prenotazioni/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dati)
+                });
+
+                const risultato = await risposta.json();
+
+                if (risposta.ok) {
+                    divMessaggio.className = 'messaggio successo';
+                    divMessaggio.innerText = 'Prenotazione confermata con successo! Ti aspettiamo.';
+                    this.reset();
+                    stato.giornoSelezionato = null;
+                    resettaOrari('Seleziona prima una data...');
+                    caricaCalendario();
+                } else {
+                    divMessaggio.className = 'messaggio errore';
+                    divMessaggio.innerText = risultato.detail;
+                    caricaCalendario();
+                    if (stato.giornoSelezionato) caricaOrari(stato.giornoSelezionato);
+                }
+            } catch (errore) {
+                divMessaggio.className = 'messaggio errore';
+                divMessaggio.innerText = 'Errore di connessione al server.';
+            }
+        });
+    </script>
+</body>
+</html>
