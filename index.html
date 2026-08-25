@@ -233,6 +233,63 @@
 
     .pallino.disponibile { background: #fff; border: 1px solid var(--colore-bordo); }
     .pallino.non-disponibile { background: #f1ece4; border: 1px solid #ddd0bd; }
+
+    /* --- Banner B2B per i Ristoratori --- */
+    .banner-b2b {
+        background: #ffffff;
+        border-left: 5px solid var(--colore-primario);
+        border-radius: 12px;
+        padding: 18px 24px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 10px 25px rgba(60, 40, 20, 0.05);
+        gap: 15px;
+    }
+
+    .banner-b2b span {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--colore-testo);
+        line-height: 1.4;
+    }
+
+    .banner-b2b strong {
+        color: var(--colore-primario-scuro);
+    }
+
+    .btn-b2b {
+        background: var(--colore-testo);
+        color: #fff;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-b2b:hover { 
+        background: #000000;
+        transform: translateY(-2px);
+    }
+
+    /* Adattamento per i telefoni */
+    @media (max-width: 600px) {
+        .banner-b2b {
+            flex-direction: column;
+            text-align: center;
+            padding: 16px;
+        }
+        .btn-b2b {
+            width: 100%;
+            text-align: center;
+        }
+    }
 </style>
 </head>
 <body>
@@ -243,6 +300,14 @@
     </header>
 
     <main class="container">
+        
+        <!-- Banner per i ristoratori proveniente dalle Ads -->
+        <div class="banner-b2b">
+            <span><strong>Sei il titolare di un locale?</strong><br>Scopri la Dashboard per gestire le prenotazioni senza commissioni.</span>
+            <a href="dashboard.html" class="btn-b2b">Vedi la Dashboard</a>
+        </div>
+        <!-- Fine Banner B2B -->
+
         <div class="prenota-card">
             <h1>Prenota un tavolo</h1>
             <p class="sottotitolo">Scegli l'area, la data e l'orario: ti mostriamo solo la disponibilità reale.</p>
@@ -301,8 +366,8 @@
     </main>
 
     <script>
-        // IL LINK È STATO AGGIORNATO AL NUOVO SERVER
-        const API = 'https://ristoranteprova-backend.onrender.com';
+        // Nuovo link del server aggiornato
+        const API = 'https://ristorante-server-2iws.onrender.com';
         
         const MESI = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
                       "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
