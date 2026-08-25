@@ -270,6 +270,8 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
         white-space: nowrap;
+        cursor: pointer;
+        border: none;
         transition: background 0.2s, transform 0.1s;
     }
 
@@ -303,8 +305,8 @@
         
         <!-- Banner per i ristoratori proveniente dalle Ads -->
         <div class="banner-b2b">
-            <span><strong>Sei il titolare di un locale?</strong><br>Scopri la Dashboard per gestire le prenotazioni senza commissioni.</span>
-            <a href="dashboard.html" class="btn-b2b">Vedi la Dashboard</a>
+            <span><strong>Sei il titolare di un locale?</strong><br>Scopri la Dashboard per gestire le prenotazioni (Pass: 1234).</span>
+            <button onclick="verificaPassword()" class="btn-b2b">Vedi la Dashboard</button>
         </div>
         <!-- Fine Banner B2B -->
 
@@ -366,6 +368,20 @@
     </main>
 
     <script>
+        // Funzione per il controllo della password
+        function verificaPassword() {
+            const passwordInserita = prompt("Area Riservata.\nInserisci la password (per la demo usa 1234):");
+            
+            if (passwordInserita === "1234") {
+                // Se la password è corretta, vai alla dashboard
+                window.location.href = "dashboard.html";
+            } else if (passwordInserita !== null) {
+                // Se preme OK con password sbagliata
+                alert("Password errata. Riprova.");
+            }
+            // Se preme "Annulla" (null), non succede niente
+        }
+
         // Nuovo link del server aggiornato
         const API = 'https://ristorante-server-2iws.onrender.com';
         
