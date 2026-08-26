@@ -57,10 +57,13 @@
             <form onsubmit="return false;">
                 <div class="mb-3 text-start">
                     <label class="form-label">Password</label>
-                    <input type="password" id="input-password" class="form-control" placeholder="Password..." required>
+                    <input type="password" id="input-password" class="form-control" placeholder="Inserisci 1234..." required>
                 </div>
                 <div id="login-errore" class="text-danger small mb-3" style="display: none;">Password errata. Riprova.</div>
                 <button type="button" onclick="verificaPassword()" class="btn btn-primary w-100 py-2">Accedi</button>
+                
+                <!-- Testo con la password esplicitata per la demo -->
+                <p class="text-muted small mt-3 mb-0">Password per la demo: <strong>1234</strong></p>
             </form>
         </div>
     </div>
