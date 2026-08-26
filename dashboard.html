@@ -45,47 +45,6 @@
             border-radius: 16px;
             box-shadow: 0 15px 35px rgba(60, 40, 20, 0.08);
         }
-
-        /* --- Barra demo per ristoratori --- */
-        .barra-demo {
-            position: fixed;
-            left: 0; right: 0; bottom: 0;
-            background: var(--colore-testo);
-            color: #fff;
-            padding: 14px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            font-size: 0.85rem;
-            z-index: 500;
-            box-shadow: 0 -8px 24px rgba(0,0,0,0.15);
-        }
-        .barra-demo span { opacity: 0.9; }
-        .barra-demo a {
-            background: var(--bs-primary);
-            color: #fff;
-            text-decoration: none;
-            padding: 9px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.82rem;
-            white-space: nowrap;
-        }
-        .barra-demo a:hover { background: var(--colore-primario-scuro); }
-        .barra-demo button {
-            background: none;
-            border: none;
-            color: #cfc6ba;
-            font-size: 1.1rem;
-            cursor: pointer;
-            line-height: 1;
-            padding: 4px;
-        }
-        @media (max-width: 560px) {
-            .barra-demo { text-align: center; padding: 12px 16px 14px; }
-        }
     </style>
 </head>
 <body class="bg-light">
@@ -102,7 +61,6 @@
                 </div>
                 <div id="login-errore" class="text-danger small mb-3" style="display: none;">Password errata. Riprova.</div>
                 <button type="button" onclick="verificaPassword()" class="btn btn-primary w-100 py-2">Accedi</button>
-                <p class="text-muted small mt-3 mb-0">Demo: password <strong>demo2026</strong></p>
             </form>
         </div>
     </div>
@@ -164,7 +122,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title text-white">Inserimento Forzato (Staff)</h5>
+                    <h5 class="modal-title">Inserimento Forzato (Staff)</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -214,40 +172,62 @@
         </div>
     </div>
 
-    <!-- Barra con il LINK CORRETTO verso index.html -->
-    <div class="barra-demo" id="barra-demo">
-        <span>Stai provando la demo di Comanda — vuoi attivarlo nel tuo locale?</span>
-        <a href="index.html#prova">Lascia i contatti</a>
-        <button type="button" onclick="document.getElementById('barra-demo').style.display='none'" aria-label="Chiudi">×</button>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        const API = 'https://ristorante-server-2iws.onrender.com';
-        const PASSWORD_STAFF = "demo2026"; 
+        const API = 'https://ristoranteprova-backend.onrender.com';
+
+        function chiaveStaff() {
+            return sessionStorage.getItem('staff_key') || '';
+        }
+
+        function headerStaff() {
+            return { 'X-Staff-Key': chiaveStaff() };
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
-            if (sessionStorage.getItem('auth_staff') === 'true') {
+            if (chiaveStaff()) {
                 sbloccaDashboard();
             }
         });
 
-        function verificaPassword() {
+        async function verificaPassword() {
             const inserita = document.getElementById('input-password').value;
             const errore = document.getElementById('login-errore');
-            if (inserita === PASSWORD_STAFF) {
-                sessionStorage.setItem('auth_staff', 'true');
-                sbloccaDashboard();
-            } else {
+            const bottone = document.querySelector('#login-screen button');
+
+            errore.style.display = 'none';
+            bottone.disabled = true;
+            bottone.innerText = 'Verifica...';
+
+            try {
+                const risposta = await fetch(`${API}/prenotazioni/`, {
+                    headers: { 'X-Staff-Key': inserita }
+                });
+
+                if (risposta.ok) {
+                    sessionStorage.setItem('staff_key', inserita);
+                    sbloccaDashboard();
+                } else if (risposta.status === 401) {
+                    errore.innerText = 'Password errata. Riprova.';
+                    errore.style.display = 'block';
+                } else {
+                    errore.innerText = 'Errore del server. Riprova tra poco.';
+                    errore.style.display = 'block';
+                }
+            } catch (e) {
+                errore.innerText = 'Errore di connessione al server.';
                 errore.style.display = 'block';
+            } finally {
+                bottone.disabled = false;
+                bottone.innerText = 'Accedi';
             }
         }
 
         function sbloccaDashboard() {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('dashboard-content').style.display = 'block';
-
+            
             const oggi = new Date().toISOString().split('T')[0];
             document.getElementById('filtro-data').value = oggi;
             document.getElementById('b-data').value = oggi;
@@ -257,7 +237,7 @@
         }
 
         function logout() {
-            sessionStorage.removeItem('auth_staff');
+            sessionStorage.removeItem('staff_key');
             location.reload();
         }
 
@@ -272,29 +252,42 @@
             caricaPrenotazioni();
         }
 
-        function popolaOrariModal() {
+        async function popolaOrariModal() {
             const select = document.getElementById('b-ora');
-            const slotPranzo = ["12:00", "12:15", "12:30", "12:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15"];
-            const slotCena = ["19:00", "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45", "21:00", "21:15", "21:30", "22:00"];
+            select.innerHTML = '<option value="">Caricamento orari...</option>';
 
             function opzioni(lista) {
                 return lista.map(o => `<option value="${o}">${o}</option>`).join('');
             }
 
-            select.innerHTML = `
-                <option value="" disabled selected>Seleziona un orario...</option>
-                <optgroup label="Pranzo">${opzioni(slotPranzo)}</optgroup>
-                <optgroup label="Cena">${opzioni(slotCena)}</optgroup>
-            `;
+            try {
+                const risposta = await fetch(`${API}/orari-validi/`);
+                const dati = await risposta.json();
+                const orari = dati.orari || [];
+                const pranzo = orari.filter(o => o < "16:00");
+                const cena = orari.filter(o => o >= "16:00");
+
+                select.innerHTML = `
+                    <option value="" disabled selected>Seleziona un orario...</option>
+                    ${pranzo.length ? `<optgroup label="Pranzo">${opzioni(pranzo)}</optgroup>` : ''}
+                    ${cena.length ? `<optgroup label="Cena">${opzioni(cena)}</optgroup>` : ''}
+                `;
+            } catch (e) {
+                select.innerHTML = '<option value="">Errore nel caricare gli orari.</option>';
+            }
         }
 
         async function caricaPrenotazioni() {
             try {
-                const response = await fetch(`${API}/prenotazioni/`);
+                const response = await fetch(`${API}/prenotazioni/`, { headers: headerStaff() });
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
                 let prenotazioni = await response.json();
 
                 const dataFiltro = document.getElementById('filtro-data').value;
-
+                
                 if (dataFiltro) {
                     prenotazioni = prenotazioni.filter(p => p.data_prenotazione === dataFiltro);
                 }
@@ -312,7 +305,7 @@
                     let coloreArea = p.area === "Misto" ? "text-danger fw-bold" : "text-primary fw-bold";
                     let testoNota = p.note || "";
                     let badgeStaff = "";
-
+                    
                     if (testoNota.includes("[Staff]")) {
                         badgeStaff = `<br><span class="badge bg-danger mt-1">Staff</span>`;
                         testoNota = testoNota.replace("[Staff]", "").trim();
@@ -339,7 +332,7 @@
                     tbody.innerHTML += riga;
                 });
             } catch (error) {
-                alert("Errore di connessione al server!");
+                alert("Errore di connessione al server Render!");
             }
         }
 
@@ -349,7 +342,7 @@
             try {
                 await fetch(`${API}/prenotazioni/${id}/tavolo`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', ...headerStaff() },
                     body: JSON.stringify({ numero_tavolo: tavoloInserito })
                 });
                 caricaPrenotazioni();
@@ -362,7 +355,7 @@
             let conferma = confirm("Sei sicuro di voler eliminare questa prenotazione?");
             if (!conferma) return;
             try {
-                await fetch(`${API}/prenotazioni/${id}`, { method: 'DELETE' });
+                await fetch(`${API}/prenotazioni/${id}`, { method: 'DELETE', headers: headerStaff() });
                 caricaPrenotazioni();
             } catch (error) {
                 alert("Errore durante la cancellazione.");
@@ -387,15 +380,20 @@
             try {
                 const risposta = await fetch(`${API}/prenotazioni/staff/`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', ...headerStaff() },
                     body: JSON.stringify(dati)
                 });
 
-                if (risposta.ok) {
+                if (risposta.status === 401) {
+                    logout();
+                    return;
+                }
+
+                if(risposta.ok) {
                     const modal = bootstrap.Modal.getInstance(document.getElementById('modalBypass'));
                     modal.hide();
                     document.getElementById('form-bypass').reset();
-
+                    
                     document.getElementById('b-data').value = new Date().toISOString().split('T')[0];
                     popolaOrariModal();
                     caricaPrenotazioni();
