@@ -229,8 +229,9 @@
     </header>
 
     <main class="container">
+        <!-- Banner con password esplicitata -->
         <div class="banner-b2b">
-            <span><strong>Sei il titolare di un locale?</strong><br>Scopri la Dashboard per gestire le prenotazioni.</span>
+            <span><strong>Sei il titolare di un locale?</strong><br>Scopri la Dashboard per gestire le prenotazioni. (Password: <strong>1234</strong>)</span>
             <button onclick="verificaPasswordDashboard()" class="btn-b2b">Vedi la Dashboard</button>
         </div>
 
@@ -288,7 +289,8 @@
         const API = 'https://ristoranteprova-backend.onrender.com';
 
         function verificaPasswordDashboard() {
-            const passwordInserita = prompt("Area Riservata.\nInserisci la password staff:");
+            // Testo del prompt aggiornato per includere il suggerimento
+            const passwordInserita = prompt("Area Riservata.\nInserisci la password staff (es. 1234):");
             if (passwordInserita) {
                 // Salva temporaneamente e reindirizza alla dashboard
                 sessionStorage.setItem('staff_key', passwordInserita);
