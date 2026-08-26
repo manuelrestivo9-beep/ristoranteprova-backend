@@ -9,10 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!--
-  META PIXEL — incolla qui il codice base del tuo Pixel Meta (Eventi Manager > Impostazioni > Codice pixel).
-  Più sotto, nello script del form, viene già richiamato fbq('track','Lead') dopo un invio riuscito:
-  una volta incollato il pixel base qui, l'evento Lead partirà in automatico e potrai ottimizzare
-  la campagna su "chi lascia il contatto", non solo su "chi guarda la pagina".
+  META PIXEL — incolla qui il codice base del tuo Pixel Meta.
 -->
 
 <style>
@@ -29,7 +26,6 @@
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -50,9 +46,7 @@
     }
 
     .eyebrow.on-ink { color: #d99a8f; }
-
     h1, h2, h3 { font-family: 'Fraunces', serif; margin: 0; }
-
     a { color: inherit; }
 
     /* ---------- HERO ---------- */
@@ -81,10 +75,7 @@
         color: #fbf7ee;
     }
 
-    .hero h1 em {
-        font-style: normal;
-        color: var(--stamp);
-    }
+    .hero h1 em { font-style: normal; color: var(--stamp); }
 
     .hero p.lead {
         font-size: 1.05rem;
@@ -124,9 +115,8 @@
     }
     .or-link a:hover { color: var(--paper); }
 
-    /* ---------- TICKET (signature element) ---------- */
+    /* ---------- TICKET ---------- */
     .ticket-wrap { display: flex; justify-content: center; }
-
     .ticket {
         position: relative;
         width: 100%;
@@ -138,7 +128,6 @@
         box-shadow: 0 30px 60px rgba(0,0,0,0.35);
         transform: rotate(-2.5deg);
     }
-
     .ticket::after {
         content: "";
         position: absolute;
@@ -187,10 +176,9 @@
         opacity: 0.92;
     }
 
-    /* ---------- VOCI DI COMANDA (pain points) ---------- */
+    /* ---------- VOCI DI COMANDA ---------- */
     .section { padding: 76px 24px; }
     .section-inner { max-width: 900px; margin: 0 auto; }
-
     .section-head { max-width: 56ch; margin-bottom: 44px; }
     .section-head h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-top: 10px; font-weight: 600; }
 
@@ -337,22 +325,17 @@
         .voce { grid-template-columns: 1fr; gap: 4px; }
         .voce-esito { justify-self: start; }
     }
-
-    @media (prefers-reduced-motion: reduce) {
-        html { scroll-behavior: auto; }
-        .cta, .form-submit, .success-links a { transition: none; }
-    }
 </style>
 </head>
 <body>
 
-    <!-- ================= HERO ================= -->
     <section class="hero">
         <div class="hero-inner">
             <div>
                 <p class="eyebrow on-ink">Per ristoranti e pizzerie</p>
                 <h1>Le prenotazioni non passano <em>più dal telefono.</em></h1>
                 <p class="lead">Comanda raccoglie le prenotazioni online 24 ore su 24 e le organizza da sola: niente più doppie prenotazioni, niente più note su allergie perse tra un tavolo e l'altro.</p>
+                <!-- LINK CORRETTO ALLA DEMO -->
                 <a href="demo.html" class="cta" target="_blank" rel="noopener">Prova subito la demo ↗</a>
                 <p class="or-link"><a href="#prova">...oppure lasciaci direttamente i tuoi contatti</a></p>
             </div>
@@ -369,14 +352,12 @@
         </div>
     </section>
 
-    <!-- ================= VOCI DI COMANDA / PAIN POINTS ================= -->
     <section class="section">
         <div class="section-inner">
             <div class="section-head">
                 <p class="eyebrow">Cosa risolve</p>
                 <h2>Tre voci che togliamo dalla tua comanda serale.</h2>
             </div>
-
             <div class="voce">
                 <span class="voce-label">01</span>
                 <span class="voce-testo"><strong>Il telefono che squilla</strong> mentre servi ai tavoli, e qualcuno resta in attesa o riattacca.</span>
@@ -395,7 +376,6 @@
         </div>
     </section>
 
-    <!-- ================= FORM ================= -->
     <section class="section form-section" id="prova">
         <div class="section-inner form-grid">
             <div class="form-copy">
@@ -403,7 +383,6 @@
                 <h2>Provala in autonomia, o fatti ricontattare.</h2>
                 <p>Che tu stia già esplorando la demo o preferisca parlarne prima con me: lasciami i tuoi dati e ti rispondo entro 24 ore per attivarla sul tuo locale.</p>
             </div>
-
             <div>
                 <form id="form-lead" class="form-card">
                     <div class="campo">
@@ -435,6 +414,7 @@
                     <div class="stamp">Confermata</div>
                     <p>Grazie! Ti scriviamo entro 24 ore per attivare la prova sul tuo locale.</p>
                     <div class="success-links">
+                        <!-- LINK CORRETTO ALLA DEMO -->
                         <a href="demo.html" target="_blank" rel="noopener">Nel frattempo, esplora la demo</a>
                     </div>
                 </div>
@@ -474,7 +454,6 @@
 
                 if (!risposta.ok) throw new Error('Invio non riuscito');
 
-                // Evento di conversione per Meta Ads, se il Pixel è installato nel <head>
                 if (typeof fbq === 'function') {
                     fbq('track', 'Lead');
                 }
