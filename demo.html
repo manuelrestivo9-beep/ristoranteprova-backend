@@ -86,9 +86,7 @@
         font-weight: 500;
     }
 
-    .campo input,
-    .campo select,
-    .campo textarea {
+    .campo input, .campo select, .campo textarea {
         width: 100%;
         padding: 12px 14px;
         border: 1px solid var(--colore-bordo);
@@ -99,9 +97,7 @@
         transition: border-color .2s, box-shadow .2s;
     }
 
-    .campo input:focus,
-    .campo select:focus,
-    .campo textarea:focus {
+    .campo input:focus, .campo select:focus, .campo textarea:focus {
         outline: none;
         border-color: var(--colore-primario);
         box-shadow: 0 0 0 3px rgba(193, 123, 78, 0.15);
@@ -122,7 +118,6 @@
         cursor: pointer;
         transition: background .2s;
     }
-
     .btn-conferma:hover { background: var(--colore-primario-scuro); }
 
     .messaggio { text-align: center; margin-top: 18px; font-weight: 600; min-height: 1.2em; }
@@ -130,111 +125,57 @@
     .messaggio.errore { color: #b3452f; }
 
     /* --- Calendario personalizzato --- */
-    .calendario {
-        border: 1px solid var(--colore-bordo);
-        border-radius: 12px;
-        padding: 16px;
-        background: #fdfaf6;
-    }
-
-    .calendario-placeholder {
-        text-align: center;
-        color: var(--colore-attenuato);
-        font-size: 0.9rem;
-        margin: 8px 0;
-    }
-
-    .calendario-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 12px;
-    }
-
-    .calendario-titolo {
-        font-family: 'Playfair Display', serif;
-        font-weight: 600;
-    }
-
-    .nav-mese {
-        background: #fff;
-        border: 1px solid var(--colore-bordo);
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        color: var(--colore-primario-scuro);
-        font-size: 0.85rem;
-    }
-
+    .calendario { border: 1px solid var(--colore-bordo); border-radius: 12px; padding: 16px; background: #fdfaf6; }
+    .calendario-placeholder { text-align: center; color: var(--colore-attenuato); font-size: 0.9rem; margin: 8px 0; }
+    .calendario-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .calendario-titolo { font-family: 'Playfair Display', serif; font-weight: 600; }
+    .nav-mese { background: #fff; border: 1px solid var(--colore-bordo); border-radius: 50%; width: 30px; height: 30px; cursor: pointer; color: var(--colore-primario-scuro); font-size: 0.85rem; }
     .nav-mese:disabled { opacity: 0.3; cursor: not-allowed; }
-
-    .calendario-griglia {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 6px;
-        text-align: center;
-    }
-
-    .giorno-settimana {
-        font-size: 0.68rem;
-        color: var(--colore-attenuato);
-        text-transform: uppercase;
-        padding: 4px 0;
-    }
-
-    .giorno {
-        padding: 8px 0;
-        border-radius: 8px;
-        border: 1px solid transparent;
-        background: transparent;
-        font-size: 0.85rem;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .giorno-disponibile {
-        background: #fff;
-        border-color: var(--colore-bordo);
-        color: var(--colore-testo);
-        cursor: pointer;
-    }
-
+    .calendario-griglia { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
+    .giorno-settimana { font-size: 0.68rem; color: var(--colore-attenuato); text-transform: uppercase; padding: 4px 0; }
+    .giorno { padding: 8px 0; border-radius: 8px; border: 1px solid transparent; background: transparent; font-size: 0.85rem; font-family: 'Poppins', sans-serif; }
+    .giorno-disponibile { background: #fff; border-color: var(--colore-bordo); color: var(--colore-testo); cursor: pointer; }
     .giorno-disponibile:hover { border-color: var(--colore-primario); }
-
-    .giorno-disponibile.selezionato {
-        background: var(--colore-primario);
-        color: #fff;
-        border-color: var(--colore-primario);
-    }
-
-    .giorno-non-disponibile {
-        background: #f1ece4;
-        color: #c9beac;
-        cursor: not-allowed;
-        text-decoration: line-through;
-    }
-
-    .calendario-legenda {
-        display: flex;
-        gap: 16px;
-        justify-content: center;
-        margin-top: 14px;
-        font-size: 0.75rem;
-        color: var(--colore-attenuato);
-    }
-
-    .pallino {
-        display: inline-block;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        margin-right: 5px;
-    }
-
+    .giorno-disponibile.selezionato { background: var(--colore-primario); color: #fff; border-color: var(--colore-primario); }
+    .giorno-non-disponibile { background: #f1ece4; color: #c9beac; cursor: not-allowed; text-decoration: line-through; }
+    .calendario-legenda { display: flex; gap: 16px; justify-content: center; margin-top: 14px; font-size: 0.75rem; color: var(--colore-attenuato); }
+    .pallino { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
     .pallino.disponibile { background: #fff; border: 1px solid var(--colore-bordo); }
     .pallino.non-disponibile { background: #f1ece4; border: 1px solid #ddd0bd; }
 
-    /* --- Barra demo per ristoratori --- */
+    /* --- Banner B2B in alto --- */
+    .banner-b2b {
+        background: #ffffff;
+        border-left: 5px solid var(--colore-primario);
+        border-radius: 12px;
+        padding: 18px 24px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 10px 25px rgba(60, 40, 20, 0.05);
+        gap: 15px;
+    }
+    .banner-b2b span { font-size: 0.95rem; font-weight: 500; color: var(--colore-testo); line-height: 1.4; }
+    .banner-b2b strong { color: var(--colore-primario-scuro); }
+    .btn-b2b {
+        background: var(--colore-testo);
+        color: #fff;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        cursor: pointer;
+        border: none;
+        transition: background 0.2s, transform 0.1s;
+    }
+    .btn-b2b:hover { background: #000000; transform: translateY(-2px); }
+
+    /* --- Barra demo in basso --- */
     .barra-demo {
         position: fixed;
         left: 0; right: 0; bottom: 0;
@@ -271,7 +212,10 @@
         line-height: 1;
         padding: 4px;
     }
-    @media (max-width: 560px) {
+    
+    @media (max-width: 600px) {
+        .banner-b2b { flex-direction: column; text-align: center; padding: 16px; }
+        .btn-b2b { width: 100%; text-align: center; }
         .barra-demo { text-align: center; padding: 12px 16px 14px; }
         main.container { margin-bottom: 90px; }
     }
@@ -285,6 +229,13 @@
     </header>
 
     <main class="container">
+        <!-- Banner per i ristoratori proveniente dalle Ads -->
+        <div class="banner-b2b">
+            <span><strong>Sei il titolare di un locale?</strong><br>Scopri la Dashboard per gestire le prenotazioni (Pass: 1234).</span>
+            <button onclick="verificaPasswordDashboard()" class="btn-b2b">Vedi la Dashboard</button>
+        </div>
+        <!-- Fine Banner B2B -->
+
         <div class="prenota-card">
             <h1>Prenota un tavolo</h1>
             <p class="sottotitolo">Scegli l'area, la data e l'orario: ti mostriamo solo la disponibilità reale.</p>
@@ -294,12 +245,10 @@
                     <label for="nome">Nome e Cognome</label>
                     <input type="text" id="nome" required>
                 </div>
-
                 <div class="campo">
                     <label for="telefono">Numero di Telefono</label>
                     <input type="tel" id="telefono" required>
                 </div>
-
                 <div class="campo">
                     <label for="area">Dove preferisci cenare?</label>
                     <select id="area" required>
@@ -309,12 +258,10 @@
                         <option value="Misto">Tavolo Misto (Ristorante e Pizzeria)</option>
                     </select>
                 </div>
-
                 <div class="campo">
                     <label for="coperti">Numero di Persone</label>
                     <input type="number" id="coperti" min="1" max="60" required>
                 </div>
-
                 <div class="campo">
                     <label>Data</label>
                     <div id="calendario" class="calendario">
@@ -322,19 +269,16 @@
                     </div>
                     <input type="hidden" id="data">
                 </div>
-
                 <div class="campo">
                     <label for="ora">Ora</label>
                     <select id="ora" required disabled>
                         <option value="">Seleziona prima una data...</option>
                     </select>
                 </div>
-
                 <div class="campo">
                     <label for="note">Richieste particolari (Allergie, Seggiolone, ecc.)</label>
                     <textarea id="note" rows="2" placeholder="Scrivi qui eventuali necessità..."></textarea>
                 </div>
-
                 <button type="submit" class="btn-conferma">Conferma Prenotazione</button>
             </form>
 
@@ -343,8 +287,17 @@
     </main>
 
     <script>
-        const API = 'https://ristorante-server-2iws.onrender.com';
+        // Funzione per il banner top
+        function verificaPasswordDashboard() {
+            const passwordInserita = prompt("Area Riservata.\nInserisci la password (per la demo usa 1234):");
+            if (passwordInserita === "1234") {
+                window.location.href = "dashboard.html";
+            } else if (passwordInserita !== null) {
+                alert("Password errata. Riprova.");
+            }
+        }
 
+        const API = 'https://ristorante-server-2iws.onrender.com';
         const MESI = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
                       "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
         const GIORNI_SETTIMANA = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
@@ -541,9 +494,11 @@
             }
         });
     </script>
+    
+    <!-- Barra con il LINK CORRETTO verso index.html -->
     <div class="barra-demo" id="barra-demo">
         <span>Stai provando la demo di Comanda — vuoi attivarlo nel tuo locale?</span>
-        <a href="scopri-il-software.html#prova" target="_blank" rel="noopener">Lascia i contatti</a>
+        <a href="index.html#prova">Lascia i contatti</a>
         <button type="button" onclick="document.getElementById('barra-demo').style.display='none'" aria-label="Chiudi">×</button>
     </div>
 
