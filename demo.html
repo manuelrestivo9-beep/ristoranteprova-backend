@@ -234,63 +234,46 @@
     .pallino.disponibile { background: #fff; border: 1px solid var(--colore-bordo); }
     .pallino.non-disponibile { background: #f1ece4; border: 1px solid #ddd0bd; }
 
-    /* --- Banner B2B per i Ristoratori --- */
-    .banner-b2b {
-        background: #ffffff;
-        border-left: 5px solid var(--colore-primario);
-        border-radius: 12px;
-        padding: 18px 24px;
-        margin-bottom: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 10px 25px rgba(60, 40, 20, 0.05);
-        gap: 15px;
-    }
-
-    .banner-b2b span {
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: var(--colore-testo);
-        line-height: 1.4;
-    }
-
-    .banner-b2b strong {
-        color: var(--colore-primario-scuro);
-    }
-
-    .btn-b2b {
+    /* --- Barra demo per ristoratori --- */
+    .barra-demo {
+        position: fixed;
+        left: 0; right: 0; bottom: 0;
         background: var(--colore-testo);
         color: #fff;
-        text-decoration: none;
-        padding: 12px 20px;
-        border-radius: 8px;
+        padding: 14px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
         font-size: 0.85rem;
+        z-index: 500;
+        box-shadow: 0 -8px 24px rgba(0,0,0,0.15);
+    }
+    .barra-demo span { opacity: 0.9; }
+    .barra-demo a {
+        background: var(--colore-primario);
+        color: #fff;
+        text-decoration: none;
+        padding: 9px 16px;
+        border-radius: 8px;
         font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        font-size: 0.82rem;
         white-space: nowrap;
-        cursor: pointer;
+    }
+    .barra-demo a:hover { background: var(--colore-primario-scuro); }
+    .barra-demo button {
+        background: none;
         border: none;
-        transition: background 0.2s, transform 0.1s;
+        color: #cfc6ba;
+        font-size: 1.1rem;
+        cursor: pointer;
+        line-height: 1;
+        padding: 4px;
     }
-
-    .btn-b2b:hover { 
-        background: #000000;
-        transform: translateY(-2px);
-    }
-
-    /* Adattamento per i telefoni */
-    @media (max-width: 600px) {
-        .banner-b2b {
-            flex-direction: column;
-            text-align: center;
-            padding: 16px;
-        }
-        .btn-b2b {
-            width: 100%;
-            text-align: center;
-        }
+    @media (max-width: 560px) {
+        .barra-demo { text-align: center; padding: 12px 16px 14px; }
+        main.container { margin-bottom: 90px; }
     }
 </style>
 </head>
@@ -302,14 +285,6 @@
     </header>
 
     <main class="container">
-        
-        <!-- Banner per i ristoratori proveniente dalle Ads -->
-        <div class="banner-b2b">
-            <span><strong>Sei il titolare di un locale?</strong><br>Scopri la Dashboard per gestire le prenotazioni (Pass: 1234).</span>
-            <button onclick="verificaPassword()" class="btn-b2b">Vedi la Dashboard</button>
-        </div>
-        <!-- Fine Banner B2B -->
-
         <div class="prenota-card">
             <h1>Prenota un tavolo</h1>
             <p class="sottotitolo">Scegli l'area, la data e l'orario: ti mostriamo solo la disponibilità reale.</p>
@@ -337,7 +312,7 @@
 
                 <div class="campo">
                     <label for="coperti">Numero di Persone</label>
-                    <input type="number" id="coperti" min="1" max="40" required>
+                    <input type="number" id="coperti" min="1" max="60" required>
                 </div>
 
                 <div class="campo">
@@ -368,23 +343,8 @@
     </main>
 
     <script>
-        // Funzione per il controllo della password
-        function verificaPassword() {
-            const passwordInserita = prompt("Area Riservata.\nInserisci la password (per la demo usa 1234):");
-            
-            if (passwordInserita === "1234") {
-                // Se la password è corretta, vai alla dashboard
-                window.location.href = "dashboard.html";
-            } else if (passwordInserita !== null) {
-                // Se preme OK con password sbagliata
-                alert("Password errata. Riprova.");
-            }
-            // Se preme "Annulla" (null), non succede niente
-        }
-
-        // Nuovo link del server aggiornato
         const API = 'https://ristorante-server-2iws.onrender.com';
-        
+
         const MESI = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
                       "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
         const GIORNI_SETTIMANA = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
@@ -430,7 +390,7 @@
             const alMesePassato = (stato.anno < annoCorrente) || (stato.anno === annoCorrente && stato.mese <= meseCorrente);
 
             const primoGiorno = new Date(stato.anno, stato.mese - 1, 1).getDay();
-            const offset = (primoGiorno + 6) % 7; // Lunedì come primo giorno
+            const offset = (primoGiorno + 6) % 7;
 
             let html = `
                 <div class="calendario-header">
@@ -581,5 +541,11 @@
             }
         });
     </script>
+    <div class="barra-demo" id="barra-demo">
+        <span>Stai provando la demo di Comanda — vuoi attivarlo nel tuo locale?</span>
+        <a href="scopri-il-software.html#prova" target="_blank" rel="noopener">Lascia i contatti</a>
+        <button type="button" onclick="document.getElementById('barra-demo').style.display='none'" aria-label="Chiudi">×</button>
+    </div>
+
 </body>
 </html>
