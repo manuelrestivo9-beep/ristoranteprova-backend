@@ -164,7 +164,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title">Inserimento Forzato (Staff)</h5>
+                    <h5 class="modal-title text-white">Inserimento Forzato (Staff)</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -214,9 +214,10 @@
         </div>
     </div>
 
+    <!-- Barra con il LINK CORRETTO verso index.html -->
     <div class="barra-demo" id="barra-demo">
         <span>Stai provando la demo di Comanda — vuoi attivarlo nel tuo locale?</span>
-        <a href="scopri-il-software.html#prova" target="_blank" rel="noopener">Lascia i contatti</a>
+        <a href="index.html#prova">Lascia i contatti</a>
         <button type="button" onclick="document.getElementById('barra-demo').style.display='none'" aria-label="Chiudi">×</button>
     </div>
 
@@ -224,7 +225,7 @@
 
     <script>
         const API = 'https://ristorante-server-2iws.onrender.com';
-        const PASSWORD_STAFF = "demo2026"; // Password demo, separata da quella reale
+        const PASSWORD_STAFF = "demo2026"; 
 
         window.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('auth_staff') === 'true') {
