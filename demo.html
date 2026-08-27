@@ -173,7 +173,11 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             const inputData = document.getElementById('data');
-            const oggi = new Date().toISOString().split('T')[0];
+            // Calcola la data esatta in base al fuso orario locale
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            const oggi = now.toISOString().split('T')[0];
+            
             inputData.value = oggi;
             inputData.min = oggi;
 
