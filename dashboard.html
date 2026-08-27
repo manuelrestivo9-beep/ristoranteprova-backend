@@ -190,6 +190,13 @@
     <script>
         const API = 'https://ristoranteprova-backend.onrender.com';
 
+        // Funzione per ottenere sempre la data locale perfetta
+        function dataOggiLocale() {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            return now.toISOString().split('T')[0];
+        }
+
         function chiaveStaff() {
             return sessionStorage.getItem('staff_key') || '';
         }
@@ -241,7 +248,7 @@
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('dashboard-content').style.display = 'block';
             
-            const oggi = new Date().toISOString().split('T')[0];
+            const oggi = dataOggiLocale();
             document.getElementById('filtro-data').value = oggi;
             document.getElementById('b-data').value = oggi;
 
@@ -255,8 +262,7 @@
         }
 
         function impostaOggi() {
-            const oggi = new Date().toISOString().split('T')[0];
-            document.getElementById('filtro-data').value = oggi;
+            document.getElementById('filtro-data').value = dataOggiLocale();
             caricaPrenotazioni();
         }
 
@@ -407,7 +413,7 @@
                     modal.hide();
                     document.getElementById('form-bypass').reset();
                     
-                    document.getElementById('b-data').value = new Date().toISOString().split('T')[0];
+                    document.getElementById('b-data').value = dataOggiLocale();
                     popolaOrariModal();
                     caricaPrenotazioni();
                 } else {
