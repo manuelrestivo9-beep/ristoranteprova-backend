@@ -1,505 +1,412 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prenota un tavolo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --colore-primario: #c17b4e;
-        --colore-primario-scuro: #8f5a37;
-        --colore-sfondo: #faf6f1;
-        --colore-testo: #2c241f;
-        --colore-bordo: #e8ddd0;
-        --colore-attenuato: #948877;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Staff - Gestione Prenotazioni</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bs-primary: #c17b4e;
+            --bs-primary-rgb: 193, 123, 78;
+            --colore-primario-scuro: #8f5a37;
+            --colore-sfondo: #faf6f1;
+            --colore-testo: #2c241f;
+        }
 
-    * { box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--colore-sfondo);
+            color: var(--colore-testo);
+        }
 
-    body {
-        margin: 0;
-        font-family: 'Poppins', sans-serif;
-        background: var(--colore-sfondo);
-        color: var(--colore-testo);
-    }
+        .navbar { background: #2c241f !important; }
+        .navbar-brand { font-family: 'Playfair Display', serif; letter-spacing: 1px; }
+        h4.text-primary, .modal-title, .login-title { font-family: 'Playfair Display', serif; color: var(--colore-primario-scuro) !important; }
+        .card { border: none; border-radius: 16px; overflow: hidden; }
+        .table-dark { --bs-table-bg: #2c241f; }
+        .btn-primary { background-color: var(--bs-primary); border-color: var(--bs-primary); }
+        .btn-primary:hover { background-color: var(--colore-primario-scuro); border-color: var(--colore-primario-scuro); }
 
-    .topbar {
-        text-align: center;
-        padding: 30px 20px 20px;
-        background: #ffffff;
-    }
-
-    .brand {
-        font-family: 'Playfair Display', serif;
-        letter-spacing: 4px;
-        font-size: 1.3rem;
-        text-transform: uppercase;
-        color: var(--colore-primario-scuro);
-    }
-
-    .brand-line {
-        width: 60px;
-        height: 2px;
-        background: var(--colore-primario);
-        margin: 14px auto 0;
-    }
-
-    main.container {
-        max-width: 620px;
-        margin: 40px auto 70px;
-        padding: 0 20px;
-    }
-
-    .prenota-card {
-        background: #ffffff;
-        border-radius: 18px;
-        box-shadow: 0 20px 45px rgba(60, 40, 20, 0.08);
-        padding: 40px 36px;
-    }
-
-    .prenota-card h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 2rem;
-        text-align: center;
-        margin: 0 0 8px;
-    }
-
-    .sottotitolo {
-        text-align: center;
-        color: var(--colore-attenuato);
-        margin: 0 0 32px;
-        font-size: 0.95rem;
-    }
-
-    .campo { margin-bottom: 22px; }
-
-    .campo label {
-        display: block;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--colore-attenuato);
-        margin-bottom: 8px;
-        font-weight: 500;
-    }
-
-    .campo input, .campo select, .campo textarea {
-        width: 100%;
-        padding: 12px 14px;
-        border: 1px solid var(--colore-bordo);
-        border-radius: 10px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.95rem;
-        background: #fdfaf6;
-        transition: border-color .2s, box-shadow .2s;
-    }
-
-    .campo input:focus, .campo select:focus, .campo textarea:focus {
-        outline: none;
-        border-color: var(--colore-primario);
-        box-shadow: 0 0 0 3px rgba(193, 123, 78, 0.15);
-    }
-
-    .campo select:disabled { color: var(--colore-attenuato); }
-
-    .btn-conferma {
-        width: 100%;
-        padding: 14px;
-        background: var(--colore-primario);
-        color: #fff;
-        border: none;
-        border-radius: 10px;
-        font-size: 0.9rem;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: background .2s;
-    }
-    .btn-conferma:hover { background: var(--colore-primario-scuro); }
-
-    .messaggio { text-align: center; margin-top: 18px; font-weight: 600; min-height: 1.2em; }
-    .messaggio.successo { color: #3f7d4e; }
-    .messaggio.errore { color: #b3452f; }
-
-    /* --- Calendario personalizzato --- */
-    .calendario { border: 1px solid var(--colore-bordo); border-radius: 12px; padding: 16px; background: #fdfaf6; }
-    .calendario-placeholder { text-align: center; color: var(--colore-attenuato); font-size: 0.9rem; margin: 8px 0; }
-    .calendario-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .calendario-titolo { font-family: 'Playfair Display', serif; font-weight: 600; }
-    .nav-mese { background: #fff; border: 1px solid var(--colore-bordo); border-radius: 50%; width: 30px; height: 30px; cursor: pointer; color: var(--colore-primario-scuro); font-size: 0.85rem; }
-    .nav-mese:disabled { opacity: 0.3; cursor: not-allowed; }
-    .calendario-griglia { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
-    .giorno-settimana { font-size: 0.68rem; color: var(--colore-attenuato); text-transform: uppercase; padding: 4px 0; }
-    .giorno { padding: 8px 0; border-radius: 8px; border: 1px solid transparent; background: transparent; font-size: 0.85rem; font-family: 'Poppins', sans-serif; }
-    .giorno-disponibile { background: #fff; border-color: var(--colore-bordo); color: var(--colore-testo); cursor: pointer; }
-    .giorno-disponibile:hover { border-color: var(--colore-primario); }
-    .giorno-disponibile.selezionato { background: var(--colore-primario); color: #fff; border-color: var(--colore-primario); }
-    .giorno-non-disponibile { background: #f1ece4; color: #c9beac; cursor: not-allowed; text-decoration: line-through; }
-    .calendario-legenda { display: flex; gap: 16px; justify-content: center; margin-top: 14px; font-size: 0.75rem; color: var(--colore-attenuato); }
-    .pallino { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
-    .pallino.disponibile { background: #fff; border: 1px solid var(--colore-bordo); }
-    .pallino.non-disponibile { background: #f1ece4; border: 1px solid #ddd0bd; }
-
-    /* --- Banner B2B in alto --- */
-    .banner-b2b {
-        background: #ffffff;
-        border-left: 5px solid var(--colore-primario);
-        border-radius: 12px;
-        padding: 18px 24px;
-        margin-bottom: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 10px 25px rgba(60, 40, 20, 0.05);
-        gap: 15px;
-    }
-    .banner-b2b span { font-size: 0.95rem; font-weight: 500; color: var(--colore-testo); line-height: 1.4; }
-    .banner-b2b strong { color: var(--colore-primario-scuro); }
-    .btn-b2b {
-        background: var(--colore-testo);
-        color: #fff;
-        text-decoration: none;
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        white-space: nowrap;
-        cursor: pointer;
-        border: none;
-        transition: background 0.2s, transform 0.1s;
-    }
-    .btn-b2b:hover { background: #000000; transform: translateY(-2px); }
-
-    /* --- Barra demo in basso --- */
-    .barra-demo {
-        position: fixed;
-        left: 0; right: 0; bottom: 0;
-        background: var(--colore-testo);
-        color: #fff;
-        padding: 14px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-        flex-wrap: wrap;
-        font-size: 0.85rem;
-        z-index: 500;
-        box-shadow: 0 -8px 24px rgba(0,0,0,0.15);
-    }
-    .barra-demo span { opacity: 0.9; }
-    .barra-demo a {
-        background: var(--colore-primario);
-        color: #fff;
-        text-decoration: none;
-        padding: 9px 16px;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.82rem;
-        white-space: nowrap;
-    }
-    .barra-demo a:hover { background: var(--colore-primario-scuro); }
-    .barra-demo button {
-        background: none;
-        border: none;
-        color: #cfc6ba;
-        font-size: 1.1rem;
-        cursor: pointer;
-        line-height: 1;
-        padding: 4px;
-    }
-    
-    @media (max-width: 600px) {
-        .banner-b2b { flex-direction: column; text-align: center; padding: 16px; }
-        .btn-b2b { width: 100%; text-align: center; }
-        .barra-demo { text-align: center; padding: 12px 16px 14px; }
-        main.container { margin-bottom: 90px; }
-    }
-</style>
+        #login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            max-width: 400px;
+            width: 100%;
+            padding: 30px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(60, 40, 20, 0.08);
+        }
+    </style>
 </head>
-<body>
+<body class="bg-light">
 
-    <header class="topbar">
-        <div class="brand">Ristorante &amp; Pizzeria</div>
-        <div class="brand-line"></div>
-    </header>
-
-    <main class="container">
-        <!-- Banner con password esplicitata -->
-        <div class="banner-b2b">
-            <span><strong>Sei il titolare di un locale?</strong><br>Scopri la Dashboard per gestire le prenotazioni. (Password: <strong>1234</strong>)</span>
-            <button onclick="verificaPasswordDashboard()" class="btn-b2b">Vedi la Dashboard</button>
-        </div>
-
-        <div class="prenota-card">
-            <h1>Prenota un tavolo</h1>
-            <p class="sottotitolo">Scegli l'area, la data e l'orario: ti mostriamo solo la disponibilità reale.</p>
-
-            <form id="form-prenotazione" novalidate>
-                <div class="campo">
-                    <label for="nome">Nome e Cognome</label>
-                    <input type="text" id="nome" required>
+    <!-- SCHERMATA DI LOGIN -->
+    <div id="login-screen">
+        <div class="login-card text-center">
+            <h3 class="login-title mb-3">🔒 Area Riservata Staff</h3>
+            <p class="text-muted small mb-4">Inserisci la password per accedere al pannello.</p>
+            <form onsubmit="return false;">
+                <div class="mb-3 text-start">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="input-password" class="form-control" placeholder="Inserisci 1234..." required>
                 </div>
-                <div class="campo">
-                    <label for="telefono">Numero di Telefono</label>
-                    <input type="tel" id="telefono" required>
-                </div>
-                <div class="campo">
-                    <label for="area">Dove preferisci cenare?</label>
-                    <select id="area" required>
-                        <option value="" disabled selected>Seleziona un'opzione...</option>
-                        <option value="Ristorante">Ristorante</option>
-                        <option value="Pizzeria">Pizzeria</option>
-                        <option value="Misto">Tavolo Misto (Ristorante e Pizzeria)</option>
-                    </select>
-                </div>
-                <div class="campo">
-                    <label for="coperti">Numero di Persone</label>
-                    <input type="number" id="coperti" min="1" max="60" required>
-                </div>
-                <div class="campo">
-                    <label>Data</label>
-                    <div id="calendario" class="calendario">
-                        <p class="calendario-placeholder">Seleziona prima l'area per vedere le date disponibili.</p>
-                    </div>
-                    <input type="hidden" id="data">
-                </div>
-                <div class="campo">
-                    <label for="ora">Ora</label>
-                    <select id="ora" required disabled>
-                        <option value="">Seleziona prima una data...</option>
-                    </select>
-                </div>
-                <div class="campo">
-                    <label for="note">Richieste particolari (Allergie, Seggiolone, ecc.)</label>
-                    <textarea id="note" rows="2" placeholder="Scrivi qui eventuali necessità..."></textarea>
-                </div>
-                <button type="submit" class="btn-conferma">Conferma Prenotazione</button>
+                <div id="login-errore" class="text-danger small mb-3" style="display: none;">Password errata. Riprova.</div>
+                <button type="button" onclick="verificaPassword()" class="btn btn-primary w-100 py-2">Accedi</button>
+                
+                <!-- Testo con la password esplicitata per la demo -->
+                <p class="text-muted small mt-3 mb-0">Password per la demo: <strong>1234</strong></p>
             </form>
-
-            <div id="messaggio" class="messaggio"></div>
         </div>
-    </main>
+    </div>
+
+    <!-- CONTENUTO DELLA DASHBOARD -->
+    <div id="dashboard-content" style="display: none;">
+        <nav class="navbar navbar-dark mb-4 shadow">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h1">👨‍🍳 Pannello Staff - Ristorante & Pizzeria</span>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">Esci 🔒</button>
+            </div>
+        </nav>
+
+        <div class="container-fluid px-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center py-3 gap-3">
+                    <h4 class="mb-0 text-primary">Prenotazioni Ricevute</h4>
+
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <div class="input-group input-group-sm" style="width: auto;">
+                            <span class="input-group-text bg-light">Filtra Data:</span>
+                            <input type="date" id="filtro-data" class="form-control" onchange="caricaPrenotazioni()">
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="impostaOggi()">Oggi</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="mostraTutte()">Tutte</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="caricaPrenotazioni()">🔄 Aggiorna</button>
+                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalBypass">➕ Inserisci Forzato</button>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped mb-0 text-center align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th># ID</th>
+                                    <th>Cliente</th>
+                                    <th>Telefono</th>
+                                    <th>Data</th>
+                                    <th>Ora</th>
+                                    <th>Area</th>
+                                    <th>Coperti</th>
+                                    <th>Note / Allergie</th>
+                                    <th>Stato Tavolo</th>
+                                    <th>Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabella-prenotazioni">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL INSERIMENTO FORZATO -->
+    <div class="modal fade" id="modalBypass" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Inserimento Forzato (Staff)</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-bypass">
+                        <div class="mb-2">
+                            <label class="form-label">Nome Cliente</label>
+                            <input type="text" class="form-control" id="b-nome" required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Telefono</label>
+                            <input type="tel" class="form-control" id="b-telefono" required>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label class="form-label">Data</label>
+                                <input type="date" class="form-control" id="b-data" required>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Ora</label>
+                                <select class="form-select" id="b-ora" required>
+                                    <option value="" disabled selected>Seleziona orario...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label class="form-label">Area</label>
+                                <select class="form-select" id="b-area" required>
+                                    <option value="Ristorante">Ristorante</option>
+                                    <option value="Pizzeria">Pizzeria</option>
+                                    <option value="Misto">Tavolo Misto</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Coperti</label>
+                                <input type="number" class="form-control" id="b-coperti" min="1" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Note (Opzionale)</label>
+                            <input type="text" class="form-control" id="b-note" placeholder="Es. Senza glutine">
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Forza Inserimento</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         const API = 'https://ristoranteprova-backend.onrender.com';
 
-        function verificaPasswordDashboard() {
-            // Testo del prompt aggiornato per includere il suggerimento
-            const passwordInserita = prompt("Area Riservata.\nInserisci la password staff (es. 1234):");
-            if (passwordInserita) {
-                // Salva temporaneamente e reindirizza alla dashboard
-                sessionStorage.setItem('staff_key', passwordInserita);
-                window.location.href = "dashboard.html";
-            }
+        function chiaveStaff() {
+            return sessionStorage.getItem('staff_key') || '';
         }
 
-        const MESI = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
-                      "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
-        const GIORNI_SETTIMANA = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
+        function headerStaff() {
+            return { 'X-Staff-Key': chiaveStaff() };
+        }
 
-        const oggiData = new Date();
-        let stato = {
-            anno: oggiData.getFullYear(),
-            mese: oggiData.getMonth() + 1,
-            giornoSelezionato: null
-        };
-
-        document.getElementById('area').addEventListener('change', () => {
-            stato.giornoSelezionato = null;
-            document.getElementById('data').value = '';
-            resettaOrari('Seleziona prima una data...');
-            caricaCalendario();
+        window.addEventListener('DOMContentLoaded', () => {
+            if (chiaveStaff()) {
+                sbloccaDashboard();
+            }
         });
 
-        async function caricaCalendario() {
-            const area = document.getElementById('area').value;
-            const contenitore = document.getElementById('calendario');
+        async function verificaPassword() {
+            const inserita = document.getElementById('input-password').value;
+            const errore = document.getElementById('login-errore');
+            const bottone = document.querySelector('#login-screen button');
 
-            if (!area) {
-                contenitore.innerHTML = '<p class="calendario-placeholder">Seleziona prima l\'area per vedere le date disponibili.</p>';
-                return;
-            }
-
-            contenitore.innerHTML = '<p class="calendario-placeholder">Caricamento date disponibili...</p>';
+            errore.style.display = 'none';
+            bottone.disabled = true;
+            bottone.innerText = 'Verifica...';
 
             try {
-                const risposta = await fetch(`${API}/disponibilita-mese/?anno=${stato.anno}&mese=${stato.mese}&area=${encodeURIComponent(area)}`);
-                const dati = await risposta.json();
-                disegnaCalendario(dati.giorni);
-            } catch (errore) {
-                contenitore.innerHTML = '<p class="calendario-placeholder">Errore di connessione al server.</p>';
+                const risposta = await fetch(`${API}/prenotazioni/`, {
+                    headers: { 'X-Staff-Key': inserita }
+                });
+
+                if (risposta.ok) {
+                    sessionStorage.setItem('staff_key', inserita);
+                    sbloccaDashboard();
+                } else if (risposta.status === 401) {
+                    errore.innerText = 'Password errata. Riprova.';
+                    errore.style.display = 'block';
+                } else {
+                    errore.innerText = 'Errore del server. Riprova tra poco.';
+                    errore.style.display = 'block';
+                }
+            } catch (e) {
+                errore.innerText = 'Errore di connessione al server.';
+                errore.style.display = 'block';
+            } finally {
+                bottone.disabled = false;
+                bottone.innerText = 'Accedi';
             }
         }
 
-        function disegnaCalendario(giorni) {
-            const contenitore = document.getElementById('calendario');
-            const meseCorrente = oggiData.getMonth() + 1;
-            const annoCorrente = oggiData.getFullYear();
-            const alMesePassato = (stato.anno < annoCorrente) || (stato.anno === annoCorrente && stato.mese <= meseCorrente);
+        function sbloccaDashboard() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('dashboard-content').style.display = 'block';
+            
+            const oggi = new Date().toISOString().split('T')[0];
+            document.getElementById('filtro-data').value = oggi;
+            document.getElementById('b-data').value = oggi;
 
-            const primoGiorno = new Date(stato.anno, stato.mese - 1, 1).getDay();
-            const offset = (primoGiorno + 6) % 7;
-
-            let html = `
-                <div class="calendario-header">
-                    <button type="button" class="nav-mese" id="mese-prec" ${alMesePassato ? 'disabled' : ''}>&#10094;</button>
-                    <span class="calendario-titolo">${MESI[stato.mese - 1]} ${stato.anno}</span>
-                    <button type="button" class="nav-mese" id="mese-succ">&#10095;</button>
-                </div>
-                <div class="calendario-griglia">
-                    ${GIORNI_SETTIMANA.map(g => `<div class="giorno-settimana">${g}</div>`).join('')}
-                    ${'<div></div>'.repeat(offset)}
-                    ${giorni.map(g => {
-                        const numero = parseInt(g.giorno.split('-')[2], 10);
-                        const selezionato = g.giorno === stato.giornoSelezionato ? 'selezionato' : '';
-                        const classe = g.disponibile ? `giorno-disponibile ${selezionato}` : 'giorno-non-disponibile';
-                        return `<button type="button" class="giorno ${classe}" data-giorno="${g.giorno}" ${g.disponibile ? '' : 'disabled'}>${numero}</button>`;
-                    }).join('')}
-                </div>
-                <div class="calendario-legenda">
-                    <span><i class="pallino disponibile"></i>Disponibile</span>
-                    <span><i class="pallino non-disponibile"></i>Completo</span>
-                </div>
-            `;
-
-            contenitore.innerHTML = html;
-
-            document.getElementById('mese-prec').addEventListener('click', () => cambiaMese(-1));
-            document.getElementById('mese-succ').addEventListener('click', () => cambiaMese(1));
-
-            contenitore.querySelectorAll('.giorno-disponibile').forEach(bottone => {
-                bottone.addEventListener('click', () => selezionaGiorno(bottone.dataset.giorno));
-            });
+            popolaOrariModal();
+            caricaPrenotazioni();
         }
 
-        function cambiaMese(delta) {
-            stato.mese += delta;
-            if (stato.mese > 12) { stato.mese = 1; stato.anno++; }
-            if (stato.mese < 1) { stato.mese = 12; stato.anno--; }
-            stato.giornoSelezionato = null;
-            document.getElementById('data').value = '';
-            resettaOrari('Seleziona prima una data...');
-            caricaCalendario();
+        function logout() {
+            sessionStorage.removeItem('staff_key');
+            location.reload();
         }
 
-        async function selezionaGiorno(giorno) {
-            stato.giornoSelezionato = giorno;
-            document.getElementById('data').value = giorno;
-            document.querySelectorAll('.giorno-disponibile').forEach(b => {
-                b.classList.toggle('selezionato', b.dataset.giorno === stato.giornoSelezionato);
-            });
-            await caricaOrari(giorno);
+        function impostaOggi() {
+            const oggi = new Date().toISOString().split('T')[0];
+            document.getElementById('filtro-data').value = oggi;
+            caricaPrenotazioni();
         }
 
-        function resettaOrari(testoPlaceholder) {
-            const select = document.getElementById('ora');
-            select.innerHTML = `<option value="">${testoPlaceholder}</option>`;
-            select.disabled = true;
+        function mostraTutte() {
+            document.getElementById('filtro-data').value = '';
+            caricaPrenotazioni();
         }
 
-        async function caricaOrari(giorno) {
-            const area = document.getElementById('area').value;
-            const select = document.getElementById('ora');
+        async function popolaOrariModal() {
+            const select = document.getElementById('b-ora');
             select.innerHTML = '<option value="">Caricamento orari...</option>';
-            select.disabled = true;
+
+            function opzioni(lista) {
+                return lista.map(o => `<option value="${o}">${o}</option>`).join('');
+            }
 
             try {
-                const risposta = await fetch(`${API}/disponibilita-giorno/?data=${giorno}&area=${encodeURIComponent(area)}`);
+                const risposta = await fetch(`${API}/orari-validi/`);
                 const dati = await risposta.json();
-
-                if (dati.chiuso) {
-                    select.innerHTML = '<option value="">Prenotazioni online chiuse per stasera: chiamaci al locale</option>';
-                    select.disabled = true;
-                    return;
-                }
-
-                const pranzo = dati.slot.filter(s => s.ora < "16:00");
-                const cena = dati.slot.filter(s => s.ora >= "16:00");
-
-                function opzioni(lista) {
-                    return lista.map(s => {
-                        let etichetta = s.ora;
-                        if (!s.disponibile) etichetta += ' (completo)';
-                        else if (s.posti_rimasti <= 5) etichetta += ` (ultimi ${s.posti_rimasti} posti)`;
-                        return `<option value="${s.ora}" ${s.disponibile ? '' : 'disabled'}>${etichetta}</option>`;
-                    }).join('');
-                }
+                const orari = dati.orari || [];
+                const pranzo = orari.filter(o => o < "16:00");
+                const cena = orari.filter(o => o >= "16:00");
 
                 select.innerHTML = `
                     <option value="" disabled selected>Seleziona un orario...</option>
                     ${pranzo.length ? `<optgroup label="Pranzo">${opzioni(pranzo)}</optgroup>` : ''}
                     ${cena.length ? `<optgroup label="Cena">${opzioni(cena)}</optgroup>` : ''}
                 `;
-                select.disabled = false;
-            } catch (errore) {
-                select.innerHTML = '<option value="">Errore di connessione al server.</option>';
+            } catch (e) {
+                select.innerHTML = '<option value="">Errore nel caricare gli orari.</option>';
             }
         }
 
-        document.getElementById('form-prenotazione').addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const divMessaggio = document.getElementById('messaggio');
+        async function caricaPrenotazioni() {
+            try {
+                const response = await fetch(`${API}/prenotazioni/`, { headers: headerStaff() });
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                let prenotazioni = await response.json();
 
-            if (!document.getElementById('data').value) {
-                divMessaggio.className = 'messaggio errore';
-                divMessaggio.innerText = 'Seleziona una data dal calendario.';
-                return;
+                const dataFiltro = document.getElementById('filtro-data').value;
+                
+                if (dataFiltro) {
+                    prenotazioni = prenotazioni.filter(p => p.data_prenotazione === dataFiltro);
+                }
+
+                const tbody = document.getElementById('tabella-prenotazioni');
+                tbody.innerHTML = '';
+
+                if (prenotazioni.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="10" class="text-muted py-4 fst-italic">Nessuna prenotazione trovata per questa data.</td></tr>`;
+                    return;
+                }
+
+                prenotazioni.forEach(p => {
+                    let coloreBadge = p.numero_tavolo === "Da assegnare" ? "bg-warning text-dark" : "bg-success";
+                    let coloreArea = p.area === "Misto" ? "text-danger fw-bold" : "text-primary fw-bold";
+                    let testoNota = p.note || "";
+                    let badgeStaff = "";
+                    
+                    if (testoNota.includes("[Staff]")) {
+                        badgeStaff = `<br><span class="badge bg-danger mt-1">Staff</span>`;
+                        testoNota = testoNota.replace("[Staff]", "").trim();
+                    }
+                    if (testoNota === "") testoNota = "<span class='text-muted'>-</span>";
+
+                    let riga = `
+                        <tr>
+                            <td class="fw-bold">${p.id}</td>
+                            <td>${p.nome_cliente}</td>
+                            <td><a href="tel:${p.telefono}" class="text-decoration-none">${p.telefono}</a></td>
+                            <td>${p.data_prenotazione}</td>
+                            <td><span class="badge bg-secondary fs-6">${p.ora_prenotazione}</span></td>
+                            <td class="${coloreArea}">${p.area}</td>
+                            <td class="fs-5">${p.numero_persone}</td>
+                            <td>${testoNota} ${badgeStaff}</td>
+                            <td><span class="badge ${coloreBadge} fs-6">${p.numero_tavolo}</span></td>
+                            <td>
+                                <button onclick="assegnaTavolo(${p.id})" class="btn btn-sm btn-primary shadow-sm me-1" title="Assegna Tavolo">📍</button>
+                                <button onclick="eliminaPrenotazione(${p.id})" class="btn btn-sm btn-danger shadow-sm" title="Elimina">❌</button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += riga;
+                });
+            } catch (error) {
+                alert("Errore di connessione al server Render!");
             }
-            if (!document.getElementById('ora').value) {
-                divMessaggio.className = 'messaggio errore';
-                divMessaggio.innerText = 'Seleziona un orario disponibile.';
-                return;
+        }
+
+        async function assegnaTavolo(id) {
+            let tavoloInserito = prompt("Inserisci il numero o il nome del tavolo (es. 'Tavolo 5'):");
+            if (!tavoloInserito) return;
+            try {
+                await fetch(`${API}/prenotazioni/${id}/tavolo`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', ...headerStaff() },
+                    body: JSON.stringify({ numero_tavolo: tavoloInserito })
+                });
+                caricaPrenotazioni();
+            } catch (error) {
+                alert("Errore durante l'assegnazione del tavolo.");
             }
+        }
+
+        async function eliminaPrenotazione(id) {
+            let conferma = confirm("Sei sicuro di voler eliminare questa prenotazione?");
+            if (!conferma) return;
+            try {
+                await fetch(`${API}/prenotazioni/${id}`, { method: 'DELETE', headers: headerStaff() });
+                caricaPrenotazioni();
+            } catch (error) {
+                alert("Errore durante la cancellazione.");
+            }
+        }
+
+        document.getElementById('form-bypass').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            let notaInserita = document.getElementById('b-note').value;
+            let noteFinali = notaInserita ? notaInserita + " [Staff]" : "[Staff]";
 
             const dati = {
-                nome_cliente: document.getElementById('nome').value,
-                telefono: document.getElementById('telefono').value,
-                data_prenotazione: document.getElementById('data').value,
-                ora_prenotazione: document.getElementById('ora').value,
-                numero_persone: parseInt(document.getElementById('coperti').value),
-                area: document.getElementById('area').value,
-                note: document.getElementById('note').value
+                nome_cliente: document.getElementById('b-nome').value,
+                telefono: document.getElementById('b-telefono').value,
+                data_prenotazione: document.getElementById('b-data').value,
+                ora_prenotazione: document.getElementById('b-ora').value,
+                numero_persone: parseInt(document.getElementById('b-coperti').value),
+                area: document.getElementById('b-area').value,
+                note: noteFinali
             };
 
             try {
-                const risposta = await fetch(`${API}/prenotazioni/`, {
+                const risposta = await fetch(`${API}/prenotazioni/staff/`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', ...headerStaff() },
                     body: JSON.stringify(dati)
                 });
 
-                const risultato = await risposta.json();
-
-                if (risposta.ok) {
-                    divMessaggio.className = 'messaggio successo';
-                    divMessaggio.innerText = 'Prenotazione confermata con successo! Ti aspettiamo.';
-                    this.reset();
-                    stato.giornoSelezionato = null;
-                    resettaOrari('Seleziona prima una data...');
-                    caricaCalendario();
-                } else {
-                    divMessaggio.className = 'messaggio errore';
-                    divMessaggio.innerText = risultato.detail;
-                    caricaCalendario();
-                    if (stato.giornoSelezionato) caricaOrari(stato.giornoSelezionato);
+                if (risposta.status === 401) {
+                    logout();
+                    return;
                 }
-            } catch (errore) {
-                divMessaggio.className = 'messaggio errore';
-                divMessaggio.innerText = 'Errore di connessione al server.';
+
+                if(risposta.ok) {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalBypass'));
+                    modal.hide();
+                    document.getElementById('form-bypass').reset();
+                    
+                    document.getElementById('b-data').value = new Date().toISOString().split('T')[0];
+                    popolaOrariModal();
+                    caricaPrenotazioni();
+                } else {
+                    alert("Errore durante l'inserimento forzato.");
+                }
+            } catch (error) {
+                alert("Errore di connessione con il server.");
             }
         });
     </script>
-    
-    <div class="barra-demo" id="barra-demo">
-        <span>Stai provando la demo di Comanda — vuoi attivarlo nel tuo locale?</span>
-        <a href="index.html#prova">Lascia i contatti</a>
-        <button type="button" onclick="document.getElementById('barra-demo').style.display='none'" aria-label="Chiudi">×</button>
-    </div>
-
 </body>
 </html>
