@@ -326,10 +326,33 @@
         }
         .barra-sticky a:hover { background: var(--stamp-dark); }
 
+        /* ---------- FRECCIA SCROLL MOBILE ---------- */
+        .scroll-indicator {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-top: 40px;
+            color: var(--fog-on-ink);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+        .scroll-indicator svg { stroke: var(--stamp); }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
         @media (max-width: 860px) {
             .hero-inner { grid-template-columns: 1fr; }
             .voce { grid-template-columns: 1fr; gap: 4px; }
             .voce-esito { justify-self: start; }
+            .scroll-indicator { display: flex; }
         }
     </style>
 </head>
@@ -374,9 +397,16 @@
                 <div class="lead-card success-card" id="success-card">
                     <div class="stamp">Confermata</div>
                     <p>Grazie! Ti chiamiamo entro 24 ore per attivare la prova sul tuo locale.</p>
-                    <a href="index.html" target="_blank" rel="noopener">Nel frattempo, guarda come prenota un cliente</a>
+                    <a href="demo.html" target="_blank" rel="noopener">Nel frattempo, guarda come prenota un cliente</a>
                 </div>
             </div>
+            
+            <!-- FRECCIA ANIMATA (Visibile solo su mobile sotto il form) -->
+            <div class="scroll-indicator">
+                <span>Scorri per i dettagli</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+            </div>
+
         </div>
     </section>
 
@@ -404,7 +434,7 @@
 
             <div class="ripresa-cta">
                 <span>Vuoi provarlo di persona prima di lasciare i contatti?</span>
-                <a href="index.html" target="_blank" rel="noopener" class="cta-link">Prova la demo ↗</a>
+                <a href="demo.html" target="_blank" rel="noopener" class="cta-link">Prova la demo ↗</a>
             </div>
         </div>
     </section>
