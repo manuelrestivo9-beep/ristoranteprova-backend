@@ -3,408 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Staff - Gestione Prenotazioni</title>
+    <title>Prenota un Tavolo - La Tua Pizzeria (Demo)</title>
+
+    <!-- Microsoft Clarity Code -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "y8hjrtwb7z");
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
         :root {
             --bs-primary: #c17b4e;
-            --bs-primary-rgb: 193, 123, 78;
-            --colore-primario-scuro: #8f5a37;
             --colore-sfondo: #faf6f1;
             --colore-testo: #2c241f;
         }
-
         body {
             font-family: 'Poppins', sans-serif;
             background: var(--colore-sfondo);
             color: var(--colore-testo);
-        }
-
-        .navbar { background: #2c241f !important; }
-        .navbar-brand { font-family: 'Playfair Display', serif; letter-spacing: 1px; }
-        h4.text-primary, .modal-title, .login-title { font-family: 'Playfair Display', serif; color: var(--colore-primario-scuro) !important; }
-        .card { border: none; border-radius: 16px; overflow: hidden; }
-        .table-dark { --bs-table-bg: #2c241f; }
-        .btn-primary { background-color: var(--bs-primary); border-color: var(--bs-primary); }
-        .btn-primary:hover { background-color: var(--colore-primario-scuro); border-color: var(--colore-primario-scuro); }
-
-        #login-screen {
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
         }
-        .login-card {
-            max-width: 400px;
-            width: 100%;
-            padding: 30px;
+        .header-ristorante {
+            background: #2c241f;
+            color: #faf6f1;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .header-ristorante h1 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 5px;
+        }
+        .card-prenotazione {
+            max-width: 500px;
+            margin: -30px auto 40px;
             background: white;
             border-radius: 16px;
             box-shadow: 0 15px 35px rgba(60, 40, 20, 0.08);
+            padding: 30px;
+            border: none;
+        }
+        .btn-primary {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+            font-weight: 500;
+            padding: 12px;
+        }
+        .btn-primary:hover {
+            background-color: #8f5a37;
+            border-color: #8f5a37;
+        }
+        .form-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-control, .form-select {
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--bs-primary);
+            box-shadow: 0 0 0 0.25rem rgba(193, 123, 78, 0.25);
+        }
+        #messaggio-successo { display: none; text-align: center; }
+        .demo-banner {
+            background: #ffc107;
+            color: #000;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
     </style>
 </head>
-<body class="bg-light">
+<body>
 
-    <!-- SCHERMATA DI LOGIN -->
-    <div id="login-screen">
-        <div class="login-card text-center">
-            <h3 class="login-title mb-3">🔒 Area Riservata Staff</h3>
-            <p class="text-muted small mb-4">Inserisci la password per accedere al pannello.</p>
-            <form onsubmit="return false;">
-                <div class="mb-3 text-start">
-                    <label class="form-label">Password</label>
-                    <input type="password" id="input-password" class="form-control" placeholder="Inserisci 1234..." required>
-                </div>
-                <div id="login-errore" class="text-danger small mb-3" style="display: none;">Password errata. Riprova.</div>
-                <button type="button" onclick="verificaPassword()" class="btn btn-primary w-100 py-2">Accedi</button>
+    <div class="demo-banner">Modalità Demo: Questa è una pagina di prova del software Comanda</div>
+
+    <div class="header-ristorante">
+        <h1>La Tua Pizzeria</h1>
+        <p>Prenotazione Tavoli Online</p>
+    </div>
+
+    <div class="container px-3">
+        <div class="card card-prenotazione">
+            
+            <form id="form-prenotazione">
+                <h4 class="mb-4 text-center" style="font-family: 'Playfair Display', serif; color: #8f5a37;">Riserva il tuo tavolo</h4>
                 
-                <!-- Testo con la password esplicitata per la demo -->
-                <p class="text-muted small mt-3 mb-0">Password per la demo: <strong>1234</strong></p>
+                <div class="row g-3 mb-3">
+                    <div class="col-6">
+                        <label class="form-label">Data</label>
+                        <input type="date" class="form-control" id="data" required>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Ora</label>
+                        <select class="form-select" id="ora" required>
+                            <option value="" disabled selected>Scegli...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-6">
+                        <label class="form-label">Persone</label>
+                        <input type="number" class="form-control" id="coperti" min="1" max="20" required value="2">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Area</label>
+                        <select class="form-select" id="area" required>
+                            <option value="Ristorante">Ristorante</option>
+                            <option value="Pizzeria" selected>Pizzeria</option>
+                            <option value="Misto">Indifferente</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Nome e Cognome</label>
+                    <input type="text" class="form-control" id="nome" required placeholder="Mario Rossi">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Telefono</label>
+                    <input type="tel" class="form-control" id="telefono" required placeholder="333 1234567">
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Note o Allergie (Opzionale)</label>
+                    <textarea class="form-control" id="note" rows="2" placeholder="Es. Seggiolone per bambino, celiachia..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100" id="btn-prenota">Conferma Prenotazione</button>
+                
+                <div id="errore-msg" class="text-danger text-center mt-3 small" style="display: none;"></div>
             </form>
-        </div>
-    </div>
 
-    <!-- CONTENUTO DELLA DASHBOARD -->
-    <div id="dashboard-content" style="display: none;">
-        <nav class="navbar navbar-dark mb-4 shadow">
-            <div class="container-fluid">
-                <span class="navbar-brand mb-0 h1">👨‍🍳 Pannello Staff - Ristorante & Pizzeria</span>
-                <button class="btn btn-outline-light btn-sm" onclick="logout()">Esci 🔒</button>
-            </div>
-        </nav>
-
-        <div class="container-fluid px-4">
-            <div class="card shadow mb-4">
-                <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center py-3 gap-3">
-                    <h4 class="mb-0 text-primary">Prenotazioni Ricevute</h4>
-
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <div class="input-group input-group-sm" style="width: auto;">
-                            <span class="input-group-text bg-light">Filtra Data:</span>
-                            <input type="date" id="filtro-data" class="form-control" onchange="caricaPrenotazioni()">
-                        </div>
-                        <button class="btn btn-sm btn-outline-secondary" onclick="impostaOggi()">Oggi</button>
-                        <button class="btn btn-sm btn-outline-secondary" onclick="mostraTutte()">Tutte</button>
-                        <button class="btn btn-sm btn-outline-secondary" onclick="caricaPrenotazioni()">🔄 Aggiorna</button>
-                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalBypass">➕ Inserisci Forzato</button>
-                    </div>
-                </div>
-
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped mb-0 text-center align-middle">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th># ID</th>
-                                    <th>Cliente</th>
-                                    <th>Telefono</th>
-                                    <th>Data</th>
-                                    <th>Ora</th>
-                                    <th>Area</th>
-                                    <th>Coperti</th>
-                                    <th>Note / Allergie</th>
-                                    <th>Stato Tavolo</th>
-                                    <th>Azioni</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabella-prenotazioni">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div id="messaggio-successo">
+                <div style="font-size: 4rem; line-height: 1;">✅</div>
+                <h3 class="mt-3" style="font-family: 'Playfair Display', serif; color: #8f5a37;">Prenotazione Ricevuta!</h3>
+                <p class="text-muted mt-2">Grazie <span id="nome-conferma" class="fw-bold"></span>, ti aspettiamo il <span id="data-conferma" class="fw-bold"></span> alle <span id="ora-conferma" class="fw-bold"></span>.</p>
+                <button class="btn btn-outline-secondary mt-3" onclick="location.reload()">Fai un'altra prova</button>
             </div>
         </div>
     </div>
-
-    <!-- MODAL INSERIMENTO FORZATO -->
-    <div class="modal fade" id="modalBypass" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title">Inserimento Forzato (Staff)</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="form-bypass">
-                        <div class="mb-2">
-                            <label class="form-label">Nome Cliente</label>
-                            <input type="text" class="form-control" id="b-nome" required>
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label">Telefono</label>
-                            <input type="tel" class="form-control" id="b-telefono" required>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col">
-                                <label class="form-label">Data</label>
-                                <input type="date" class="form-control" id="b-data" required>
-                            </div>
-                            <div class="col">
-                                <label class="form-label">Ora</label>
-                                <select class="form-select" id="b-ora" required>
-                                    <option value="" disabled selected>Seleziona orario...</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col">
-                                <label class="form-label">Area</label>
-                                <select class="form-select" id="b-area" required>
-                                    <option value="Ristorante">Ristorante</option>
-                                    <option value="Pizzeria">Pizzeria</option>
-                                    <option value="Misto">Tavolo Misto</option>
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label class="form-label">Coperti</label>
-                                <input type="number" class="form-control" id="b-coperti" min="1" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Note (Opzionale)</label>
-                            <input type="text" class="form-control" id="b-note" placeholder="Es. Senza glutine">
-                        </div>
-                        <button type="submit" class="btn btn-success w-100">Forza Inserimento</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         const API = 'https://ristoranteprova-backend.onrender.com';
 
-        function chiaveStaff() {
-            return sessionStorage.getItem('staff_key') || '';
-        }
-
-        function headerStaff() {
-            return { 'X-Staff-Key': chiaveStaff() };
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
-            if (chiaveStaff()) {
-                sbloccaDashboard();
-            }
+            const inputData = document.getElementById('data');
+            const oggi = new Date().toISOString().split('T')[0];
+            inputData.value = oggi;
+            inputData.min = oggi;
+
+            popolaOrari();
         });
 
-        async function verificaPassword() {
-            const inserita = document.getElementById('input-password').value;
-            const errore = document.getElementById('login-errore');
-            const bottone = document.querySelector('#login-screen button');
-
-            errore.style.display = 'none';
-            bottone.disabled = true;
-            bottone.innerText = 'Verifica...';
-
-            try {
-                const risposta = await fetch(`${API}/prenotazioni/`, {
-                    headers: { 'X-Staff-Key': inserita }
-                });
-
-                if (risposta.ok) {
-                    sessionStorage.setItem('staff_key', inserita);
-                    sbloccaDashboard();
-                } else if (risposta.status === 401) {
-                    errore.innerText = 'Password errata. Riprova.';
-                    errore.style.display = 'block';
-                } else {
-                    errore.innerText = 'Errore del server. Riprova tra poco.';
-                    errore.style.display = 'block';
-                }
-            } catch (e) {
-                errore.innerText = 'Errore di connessione al server.';
-                errore.style.display = 'block';
-            } finally {
-                bottone.disabled = false;
-                bottone.innerText = 'Accedi';
-            }
-        }
-
-        function sbloccaDashboard() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('dashboard-content').style.display = 'block';
+        async function popolaOrari() {
+            const selectOra = document.getElementById('ora');
             
-            const oggi = new Date().toISOString().split('T')[0];
-            document.getElementById('filtro-data').value = oggi;
-            document.getElementById('b-data').value = oggi;
-
-            popolaOrariModal();
-            caricaPrenotazioni();
-        }
-
-        function logout() {
-            sessionStorage.removeItem('staff_key');
-            location.reload();
-        }
-
-        function impostaOggi() {
-            const oggi = new Date().toISOString().split('T')[0];
-            document.getElementById('filtro-data').value = oggi;
-            caricaPrenotazioni();
-        }
-
-        function mostraTutte() {
-            document.getElementById('filtro-data').value = '';
-            caricaPrenotazioni();
-        }
-
-        async function popolaOrariModal() {
-            const select = document.getElementById('b-ora');
-            select.innerHTML = '<option value="">Caricamento orari...</option>';
-
-            function opzioni(lista) {
-                return lista.map(o => `<option value="${o}">${o}</option>`).join('');
-            }
-
             try {
                 const risposta = await fetch(`${API}/orari-validi/`);
                 const dati = await risposta.json();
                 const orari = dati.orari || [];
+                
                 const pranzo = orari.filter(o => o < "16:00");
                 const cena = orari.filter(o => o >= "16:00");
 
-                select.innerHTML = `
-                    <option value="" disabled selected>Seleziona un orario...</option>
-                    ${pranzo.length ? `<optgroup label="Pranzo">${opzioni(pranzo)}</optgroup>` : ''}
-                    ${cena.length ? `<optgroup label="Cena">${opzioni(cena)}</optgroup>` : ''}
+                function creaOpzioni(lista) {
+                    return lista.map(o => `<option value="${o}">${o}</option>`).join('');
+                }
+
+                selectOra.innerHTML = `
+                    <option value="" disabled selected>Scegli...</option>
+                    ${pranzo.length ? `<optgroup label="Pranzo">${creaOpzioni(pranzo)}</optgroup>` : ''}
+                    ${cena.length ? `<optgroup label="Cena">${creaOpzioni(cena)}</optgroup>` : ''}
                 `;
             } catch (e) {
-                select.innerHTML = '<option value="">Errore nel caricare gli orari.</option>';
+                selectOra.innerHTML = '<option value="">Errore server</option>';
             }
         }
 
-        async function caricaPrenotazioni() {
-            try {
-                const response = await fetch(`${API}/prenotazioni/`, { headers: headerStaff() });
-                if (response.status === 401) {
-                    logout();
-                    return;
-                }
-                let prenotazioni = await response.json();
-
-                const dataFiltro = document.getElementById('filtro-data').value;
-                
-                if (dataFiltro) {
-                    prenotazioni = prenotazioni.filter(p => p.data_prenotazione === dataFiltro);
-                }
-
-                const tbody = document.getElementById('tabella-prenotazioni');
-                tbody.innerHTML = '';
-
-                if (prenotazioni.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="10" class="text-muted py-4 fst-italic">Nessuna prenotazione trovata per questa data.</td></tr>`;
-                    return;
-                }
-
-                prenotazioni.forEach(p => {
-                    let coloreBadge = p.numero_tavolo === "Da assegnare" ? "bg-warning text-dark" : "bg-success";
-                    let coloreArea = p.area === "Misto" ? "text-danger fw-bold" : "text-primary fw-bold";
-                    let testoNota = p.note || "";
-                    let badgeStaff = "";
-                    
-                    if (testoNota.includes("[Staff]")) {
-                        badgeStaff = `<br><span class="badge bg-danger mt-1">Staff</span>`;
-                        testoNota = testoNota.replace("[Staff]", "").trim();
-                    }
-                    if (testoNota === "") testoNota = "<span class='text-muted'>-</span>";
-
-                    let riga = `
-                        <tr>
-                            <td class="fw-bold">${p.id}</td>
-                            <td>${p.nome_cliente}</td>
-                            <td><a href="tel:${p.telefono}" class="text-decoration-none">${p.telefono}</a></td>
-                            <td>${p.data_prenotazione}</td>
-                            <td><span class="badge bg-secondary fs-6">${p.ora_prenotazione}</span></td>
-                            <td class="${coloreArea}">${p.area}</td>
-                            <td class="fs-5">${p.numero_persone}</td>
-                            <td>${testoNota} ${badgeStaff}</td>
-                            <td><span class="badge ${coloreBadge} fs-6">${p.numero_tavolo}</span></td>
-                            <td>
-                                <button onclick="assegnaTavolo(${p.id})" class="btn btn-sm btn-primary shadow-sm me-1" title="Assegna Tavolo">📍</button>
-                                <button onclick="eliminaPrenotazione(${p.id})" class="btn btn-sm btn-danger shadow-sm" title="Elimina">❌</button>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += riga;
-                });
-            } catch (error) {
-                alert("Errore di connessione al server Render!");
-            }
-        }
-
-        async function assegnaTavolo(id) {
-            let tavoloInserito = prompt("Inserisci il numero o il nome del tavolo (es. 'Tavolo 5'):");
-            if (!tavoloInserito) return;
-            try {
-                await fetch(`${API}/prenotazioni/${id}/tavolo`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', ...headerStaff() },
-                    body: JSON.stringify({ numero_tavolo: tavoloInserito })
-                });
-                caricaPrenotazioni();
-            } catch (error) {
-                alert("Errore durante l'assegnazione del tavolo.");
-            }
-        }
-
-        async function eliminaPrenotazione(id) {
-            let conferma = confirm("Sei sicuro di voler eliminare questa prenotazione?");
-            if (!conferma) return;
-            try {
-                await fetch(`${API}/prenotazioni/${id}`, { method: 'DELETE', headers: headerStaff() });
-                caricaPrenotazioni();
-            } catch (error) {
-                alert("Errore durante la cancellazione.");
-            }
-        }
-
-        document.getElementById('form-bypass').addEventListener('submit', async function (e) {
+        document.getElementById('form-prenotazione').addEventListener('submit', async function(e) {
             e.preventDefault();
-            let notaInserita = document.getElementById('b-note').value;
-            let noteFinali = notaInserita ? notaInserita + " [Staff]" : "[Staff]";
+            
+            const btn = document.getElementById('btn-prenota');
+            const errBox = document.getElementById('errore-msg');
+            btn.disabled = true;
+            btn.innerText = 'Invio in corso...';
+            errBox.style.display = 'none';
 
             const dati = {
-                nome_cliente: document.getElementById('b-nome').value,
-                telefono: document.getElementById('b-telefono').value,
-                data_prenotazione: document.getElementById('b-data').value,
-                ora_prenotazione: document.getElementById('b-ora').value,
-                numero_persone: parseInt(document.getElementById('b-coperti').value),
-                area: document.getElementById('b-area').value,
-                note: noteFinali
+                nome_cliente: document.getElementById('nome').value,
+                telefono: document.getElementById('telefono').value,
+                data_prenotazione: document.getElementById('data').value,
+                ora_prenotazione: document.getElementById('ora').value,
+                numero_persone: parseInt(document.getElementById('coperti').value),
+                area: document.getElementById('area').value,
+                note: document.getElementById('note').value
             };
 
             try {
-                const risposta = await fetch(`${API}/prenotazioni/staff/`, {
+                const risposta = await fetch(`${API}/prenotazioni/`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', ...headerStaff() },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dati)
                 });
 
-                if (risposta.status === 401) {
-                    logout();
-                    return;
-                }
-
-                if(risposta.ok) {
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalBypass'));
-                    modal.hide();
-                    document.getElementById('form-bypass').reset();
+                if (risposta.ok) {
+                    document.getElementById('form-prenotazione').style.display = 'none';
+                    document.getElementById('messaggio-successo').style.display = 'block';
                     
-                    document.getElementById('b-data').value = new Date().toISOString().split('T')[0];
-                    popolaOrariModal();
-                    caricaPrenotazioni();
+                    document.getElementById('nome-conferma').innerText = dati.nome_cliente;
+                    const splitData = dati.data_prenotazione.split('-');
+                    document.getElementById('data-conferma').innerText = `${splitData[2]}/${splitData[1]}/${splitData[0]}`;
+                    document.getElementById('ora-conferma').innerText = dati.ora_prenotazione;
                 } else {
-                    alert("Errore durante l'inserimento forzato.");
+                    throw new Error('Errore dal server');
                 }
             } catch (error) {
-                alert("Errore di connessione con il server.");
+                errBox.innerText = 'Si è verificato un errore durante la prenotazione. Riprova.';
+                errBox.style.display = 'block';
+                btn.disabled = false;
+                btn.innerText = 'Conferma Prenotazione';
             }
         });
     </script>
