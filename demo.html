@@ -1,505 +1,463 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prenota un tavolo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --colore-primario: #c17b4e;
-        --colore-primario-scuro: #8f5a37;
-        --colore-sfondo: #faf6f1;
-        --colore-testo: #2c241f;
-        --colore-bordo: #e8ddd0;
-        --colore-attenuato: #948877;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comanda — Prenotazioni senza telefono, per ristoranti e pizzerie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    * { box-sizing: border-box; }
+    <!-- Microsoft Clarity Code -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "y8hjrtwb7z");
+    </script>
 
-    body {
-        margin: 0;
-        font-family: 'Poppins', sans-serif;
-        background: var(--colore-sfondo);
-        color: var(--colore-testo);
-    }
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1588215492983251');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1588215492983251&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
 
-    .topbar {
-        text-align: center;
-        padding: 30px 20px 20px;
-        background: #ffffff;
-    }
+    <style>
+        :root {
+            --ink: #1c231f;
+            --ink-soft: #2a332c;
+            --paper: #f5f0e3;
+            --paper-dim: #ece4d0;
+            --stamp: #b23a2e;
+            --stamp-dark: #8f2e24;
+            --brass: #ad8a52;
+            --fog: #8b9186;
+            --fog-on-ink: #a9b3a4;
+            --ok: #4a7a5c;
+        }
 
-    .brand {
-        font-family: 'Playfair Display', serif;
-        letter-spacing: 4px;
-        font-size: 1.3rem;
-        text-transform: uppercase;
-        color: var(--colore-primario-scuro);
-    }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
 
-    .brand-line {
-        width: 60px;
-        height: 2px;
-        background: var(--colore-primario);
-        margin: 14px auto 0;
-    }
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            padding-bottom: 74px; /* spazio per la barra sticky */
+        }
 
-    main.container {
-        max-width: 620px;
-        margin: 40px auto 70px;
-        padding: 0 20px;
-    }
+        .eyebrow {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--stamp);
+            font-weight: 600;
+        }
+        .eyebrow.on-ink { color: #d99a8f; }
+        h1, h2, h3 { font-family: 'Fraunces', serif; margin: 0; }
+        a { color: inherit; }
 
-    .prenota-card {
-        background: #ffffff;
-        border-radius: 18px;
-        box-shadow: 0 20px 45px rgba(60, 40, 20, 0.08);
-        padding: 40px 36px;
-    }
+        /* ---------- HERO ---------- */
+        .hero {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 56px 24px 72px;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .prenota-card h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 2rem;
-        text-align: center;
-        margin: 0 0 8px;
-    }
+        .hero-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 48px;
+            align-items: start;
+        }
 
-    .sottotitolo {
-        text-align: center;
-        color: var(--colore-attenuato);
-        margin: 0 0 32px;
-        font-size: 0.95rem;
-    }
+        .hero h1 {
+            font-size: clamp(1.9rem, 3.6vw, 2.7rem);
+            font-weight: 600;
+            line-height: 1.14;
+            margin: 12px 0 16px;
+            color: #fbf7ee;
+        }
+        .hero h1 em { font-style: normal; color: var(--stamp); }
 
-    .campo { margin-bottom: 22px; }
+        .hero p.lead {
+            font-size: 1rem;
+            color: var(--fog-on-ink);
+            max-width: 46ch;
+            margin: 0 0 26px;
+        }
 
-    .campo label {
-        display: block;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--colore-attenuato);
-        margin-bottom: 8px;
-        font-weight: 500;
-    }
+        .prova-mini {
+            display: inline-block;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--fog-on-ink);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            margin-top: 4px;
+        }
+        .prova-mini:hover { color: var(--paper); }
 
-    .campo input, .campo select, .campo textarea {
-        width: 100%;
-        padding: 12px 14px;
-        border: 1px solid var(--colore-bordo);
-        border-radius: 10px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.95rem;
-        background: #fdfaf6;
-        transition: border-color .2s, box-shadow .2s;
-    }
+        /* ---------- FORM (nell'hero, sempre visibile) ---------- */
+        .lead-card {
+            background: var(--paper);
+            color: var(--ink);
+            border-radius: 6px;
+            padding: 26px 26px 24px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+        }
 
-    .campo input:focus, .campo select:focus, .campo textarea:focus {
-        outline: none;
-        border-color: var(--colore-primario);
-        box-shadow: 0 0 0 3px rgba(193, 123, 78, 0.15);
-    }
+        .lead-card .titolo-form {
+            font-family: 'Fraunces', serif;
+            font-size: 1.28rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .lead-card .sottotitolo-form {
+            font-size: 0.86rem;
+            color: var(--fog);
+            margin-bottom: 18px;
+        }
 
-    .campo select:disabled { color: var(--colore-attenuato); }
+        .campo { margin-bottom: 15px; }
+        .campo label {
+            display: block;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--fog);
+            margin-bottom: 6px;
+        }
+        .campo input, .campo textarea {
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid var(--paper-dim);
+            background: transparent;
+            padding: 8px 2px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.97rem;
+            color: var(--ink);
+        }
+        .campo input:focus, .campo textarea:focus {
+            outline: none;
+            border-bottom-color: var(--stamp);
+        }
+        .campo textarea { resize: vertical; min-height: 52px; }
+        .campo-facoltativo label::after { content: " (facoltativo)"; text-transform: none; letter-spacing: 0; opacity: 0.75; }
 
-    .btn-conferma {
-        width: 100%;
-        padding: 14px;
-        background: var(--colore-primario);
-        color: #fff;
-        border: none;
-        border-radius: 10px;
-        font-size: 0.9rem;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: background .2s;
-    }
-    .btn-conferma:hover { background: var(--colore-primario-scuro); }
+        .form-submit {
+            width: 100%;
+            margin-top: 4px;
+            background: var(--stamp);
+            color: #fff8f2;
+            border: none;
+            padding: 14px;
+            border-radius: 3px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.84rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .18s ease;
+        }
+        .form-submit:hover { background: var(--stamp-dark); }
+        .form-submit:disabled { opacity: 0.6; cursor: wait; }
 
-    .messaggio { text-align: center; margin-top: 18px; font-weight: 600; min-height: 1.2em; }
-    .messaggio.successo { color: #3f7d4e; }
-    .messaggio.errore { color: #b3452f; }
+        .form-note {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.68rem;
+            color: var(--fog);
+            margin-top: 10px;
+        }
 
-    /* --- Calendario personalizzato --- */
-    .calendario { border: 1px solid var(--colore-bordo); border-radius: 12px; padding: 16px; background: #fdfaf6; }
-    .calendario-placeholder { text-align: center; color: var(--colore-attenuato); font-size: 0.9rem; margin: 8px 0; }
-    .calendario-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .calendario-titolo { font-family: 'Playfair Display', serif; font-weight: 600; }
-    .nav-mese { background: #fff; border: 1px solid var(--colore-bordo); border-radius: 50%; width: 30px; height: 30px; cursor: pointer; color: var(--colore-primario-scuro); font-size: 0.85rem; }
-    .nav-mese:disabled { opacity: 0.3; cursor: not-allowed; }
-    .calendario-griglia { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
-    .giorno-settimana { font-size: 0.68rem; color: var(--colore-attenuato); text-transform: uppercase; padding: 4px 0; }
-    .giorno { padding: 8px 0; border-radius: 8px; border: 1px solid transparent; background: transparent; font-size: 0.85rem; font-family: 'Poppins', sans-serif; }
-    .giorno-disponibile { background: #fff; border-color: var(--colore-bordo); color: var(--colore-testo); cursor: pointer; }
-    .giorno-disponibile:hover { border-color: var(--colore-primario); }
-    .giorno-disponibile.selezionato { background: var(--colore-primario); color: #fff; border-color: var(--colore-primario); }
-    .giorno-non-disponibile { background: #f1ece4; color: #c9beac; cursor: not-allowed; text-decoration: line-through; }
-    .calendario-legenda { display: flex; gap: 16px; justify-content: center; margin-top: 14px; font-size: 0.75rem; color: var(--colore-attenuato); }
-    .pallino { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
-    .pallino.disponibile { background: #fff; border: 1px solid var(--colore-bordo); }
-    .pallino.non-disponibile { background: #f1ece4; border: 1px solid #ddd0bd; }
+        .form-error {
+            font-size: 0.83rem;
+            color: var(--stamp);
+            margin-top: 10px;
+            display: none;
+        }
 
-    /* --- Banner B2B in alto --- */
-    .banner-b2b {
-        background: #ffffff;
-        border-left: 5px solid var(--colore-primario);
-        border-radius: 12px;
-        padding: 18px 24px;
-        margin-bottom: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 10px 25px rgba(60, 40, 20, 0.05);
-        gap: 15px;
-    }
-    .banner-b2b span { font-size: 0.95rem; font-weight: 500; color: var(--colore-testo); line-height: 1.4; }
-    .banner-b2b strong { color: var(--colore-primario-scuro); }
-    .btn-b2b {
-        background: var(--colore-testo);
-        color: #fff;
-        text-decoration: none;
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        white-space: nowrap;
-        cursor: pointer;
-        border: none;
-        transition: background 0.2s, transform 0.1s;
-    }
-    .btn-b2b:hover { background: #000000; transform: translateY(-2px); }
+        .success-card { display: none; text-align: center; }
+        .success-card .stamp {
+            display: inline-block;
+            border: 3px solid var(--stamp);
+            color: var(--stamp);
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+            padding: 6px 14px;
+            transform: rotate(-6deg);
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+        .success-card p { color: var(--ink-soft); margin: 0 0 18px; font-size: 0.92rem; }
+        .success-card a {
+            display: inline-block;
+            text-decoration: none;
+            border: 1.5px solid var(--ink);
+            color: var(--ink);
+            padding: 11px 18px;
+            border-radius: 3px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .success-card a:hover { background: var(--ink); color: var(--paper); }
 
-    /* --- Barra demo in basso --- */
-    .barra-demo {
-        position: fixed;
-        left: 0; right: 0; bottom: 0;
-        background: var(--colore-testo);
-        color: #fff;
-        padding: 14px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-        flex-wrap: wrap;
-        font-size: 0.85rem;
-        z-index: 500;
-        box-shadow: 0 -8px 24px rgba(0,0,0,0.15);
-    }
-    .barra-demo span { opacity: 0.9; }
-    .barra-demo a {
-        background: var(--colore-primario);
-        color: #fff;
-        text-decoration: none;
-        padding: 9px 16px;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.82rem;
-        white-space: nowrap;
-    }
-    .barra-demo a:hover { background: var(--colore-primario-scuro); }
-    .barra-demo button {
-        background: none;
-        border: none;
-        color: #cfc6ba;
-        font-size: 1.1rem;
-        cursor: pointer;
-        line-height: 1;
-        padding: 4px;
-    }
-    
-    @media (max-width: 600px) {
-        .banner-b2b { flex-direction: column; text-align: center; padding: 16px; }
-        .btn-b2b { width: 100%; text-align: center; }
-        .barra-demo { text-align: center; padding: 12px 16px 14px; }
-        main.container { margin-bottom: 90px; }
-    }
-</style>
+        /* ---------- VOCI DI COMANDA ---------- */
+        .section { padding: 64px 24px; }
+        .section-inner { max-width: 900px; margin: 0 auto; }
+        .section-head { max-width: 56ch; margin-bottom: 40px; }
+        .section-head h2 { font-size: clamp(1.5rem, 2.6vw, 2rem); margin-top: 10px; font-weight: 600; }
+
+        .voce {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: baseline;
+            gap: 18px;
+            padding: 20px 0;
+            border-bottom: 1px dotted #d8cdb4;
+        }
+        .voce:first-child { border-top: 1px dotted #d8cdb4; }
+        .voce-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--fog);
+            white-space: nowrap;
+        }
+        .voce-testo { font-size: 1rem; color: var(--ink-soft); }
+        .voce-testo strong { color: var(--ink); }
+        .voce-esito {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--ok);
+            white-space: nowrap;
+        }
+
+        /* ---------- RIPRESA CTA A META PAGINA ---------- */
+        .ripresa-cta {
+            background: var(--paper-dim);
+            border-radius: 8px;
+            padding: 22px 26px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 8px;
+        }
+        .ripresa-cta span { font-size: 0.95rem; color: var(--ink-soft); }
+        .ripresa-cta a.cta-link {
+            background: var(--stamp);
+            color: #fff8f2;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 3px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .ripresa-cta a.cta-link:hover { background: var(--stamp-dark); }
+
+        footer {
+            text-align: center;
+            padding: 30px 24px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--fog);
+        }
+
+        /* ---------- BARRA STICKY ---------- */
+        .barra-sticky {
+            position: fixed;
+            left: 0; right: 0; bottom: 0;
+            background: var(--ink);
+            color: var(--paper);
+            padding: 13px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            z-index: 500;
+            box-shadow: 0 -8px 24px rgba(0,0,0,0.18);
+        }
+        .barra-sticky span { opacity: 0.9; }
+        .barra-sticky a {
+            background: var(--stamp);
+            color: #fff8f2;
+            text-decoration: none;
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .barra-sticky a:hover { background: var(--stamp-dark); }
+
+        @media (max-width: 860px) {
+            .hero-inner { grid-template-columns: 1fr; }
+            .voce { grid-template-columns: 1fr; gap: 4px; }
+            .voce-esito { justify-self: start; }
+        }
+    </style>
 </head>
 <body>
 
-    <header class="topbar">
-        <div class="brand">Ristorante &amp; Pizzeria</div>
-        <div class="brand-line"></div>
-    </header>
+    <section class="hero">
+        <div class="hero-inner">
+            <div>
+                <p class="eyebrow on-ink">Per ristoranti e pizzerie</p>
+                <h1>Le prenotazioni non passano <em>più dal telefono.</em></h1>
+                <p class="lead">Comanda raccoglie le prenotazioni online 24 ore su 24 e le organizza da sola: niente più doppie prenotazioni, niente più note su allergie perse tra un tavolo e l'altro.</p>
+                <a href="#voci" class="prova-mini">Vedi cosa risolve ↓</a>
+            </div>
 
-    <main class="container">
-        <!-- Banner con password esplicitata -->
-        <div class="banner-b2b">
-            <span><strong>Sei il titolare di un locale?</strong><br>Scopri la Dashboard per gestire le prenotazioni. (Password: <strong>1234</strong>)</span>
-            <button onclick="verificaPasswordDashboard()" class="btn-b2b">Vedi la Dashboard</button>
-        </div>
+            <div>
+                <form id="form-lead" class="lead-card">
+                    <div class="titolo-form">Prova gratuita, un mese</div>
+                    <p class="sottotitolo-form">Lasciaci il tuo numero: ti chiamiamo noi e attiviamo la prova sul tuo locale.</p>
 
-        <div class="prenota-card">
-            <h1>Prenota un tavolo</h1>
-            <p class="sottotitolo">Scegli l'area, la data e l'orario: ti mostriamo solo la disponibilità reale.</p>
-
-            <form id="form-prenotazione" novalidate>
-                <div class="campo">
-                    <label for="nome">Nome e Cognome</label>
-                    <input type="text" id="nome" required>
-                </div>
-                <div class="campo">
-                    <label for="telefono">Numero di Telefono</label>
-                    <input type="tel" id="telefono" required>
-                </div>
-                <div class="campo">
-                    <label for="area">Dove preferisci cenare?</label>
-                    <select id="area" required>
-                        <option value="" disabled selected>Seleziona un'opzione...</option>
-                        <option value="Ristorante">Ristorante</option>
-                        <option value="Pizzeria">Pizzeria</option>
-                        <option value="Misto">Tavolo Misto (Ristorante e Pizzeria)</option>
-                    </select>
-                </div>
-                <div class="campo">
-                    <label for="coperti">Numero di Persone</label>
-                    <input type="number" id="coperti" min="1" max="60" required>
-                </div>
-                <div class="campo">
-                    <label>Data</label>
-                    <div id="calendario" class="calendario">
-                        <p class="calendario-placeholder">Seleziona prima l'area per vedere le date disponibili.</p>
+                    <div class="campo">
+                        <label for="nome">Nome e cognome</label>
+                        <input type="text" id="nome" name="nome" required autocomplete="name">
                     </div>
-                    <input type="hidden" id="data">
-                </div>
-                <div class="campo">
-                    <label for="ora">Ora</label>
-                    <select id="ora" required disabled>
-                        <option value="">Seleziona prima una data...</option>
-                    </select>
-                </div>
-                <div class="campo">
-                    <label for="note">Richieste particolari (Allergie, Seggiolone, ecc.)</label>
-                    <textarea id="note" rows="2" placeholder="Scrivi qui eventuali necessità..."></textarea>
-                </div>
-                <button type="submit" class="btn-conferma">Conferma Prenotazione</button>
-            </form>
+                    <div class="campo">
+                        <label for="telefono">Telefono</label>
+                        <input type="tel" id="telefono" name="telefono" required autocomplete="tel">
+                    </div>
+                    <div class="campo">
+                        <label for="locale">Nome del locale</label>
+                        <input type="text" id="locale" name="locale" required autocomplete="organization">
+                    </div>
+                    <div class="campo campo-facoltativo">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" autocomplete="email">
+                    </div>
 
-            <div id="messaggio" class="messaggio"></div>
+                    <button type="submit" class="form-submit" id="btn-invia">Chiamatemi per la prova</button>
+                    <p class="form-error" id="form-errore">Qualcosa non ha funzionato. Scrivi a salasmart004@gmail.com</p>
+                    <p class="form-note">Ti richiamiamo entro 24 ore. Nessun impegno.</p>
+                </form>
+
+                <div class="lead-card success-card" id="success-card">
+                    <div class="stamp">Confermata</div>
+                    <p>Grazie! Ti chiamiamo entro 24 ore per attivare la prova sul tuo locale.</p>
+                    <a href="index.html" target="_blank" rel="noopener">Nel frattempo, guarda come prenota un cliente</a>
+                </div>
+            </div>
         </div>
-    </main>
+    </section>
+
+    <section class="section" id="voci">
+        <div class="section-inner">
+            <div class="section-head">
+                <p class="eyebrow">Cosa risolve</p>
+                <h2>Tre voci che togliamo dalla tua comanda serale.</h2>
+            </div>
+            <div class="voce">
+                <span class="voce-label">01</span>
+                <span class="voce-testo"><strong>Il telefono che squilla</strong> mentre servi ai tavoli, e qualcuno resta in attesa o riattacca.</span>
+                <span class="voce-esito">Risolto →</span>
+            </div>
+            <div class="voce">
+                <span class="voce-label">02</span>
+                <span class="voce-testo"><strong>Doppie prenotazioni</strong> per lo stesso tavolo, stesso orario, scoperte solo quando i clienti sono già lì.</span>
+                <span class="voce-esito">Risolto →</span>
+            </div>
+            <div class="voce">
+                <span class="voce-label">03</span>
+                <span class="voce-testo"><strong>Allergie e richieste</strong> segnate su un foglio volante che si perde prima di arrivare in cucina.</span>
+                <span class="voce-esito">Risolto →</span>
+            </div>
+
+            <div class="ripresa-cta">
+                <span>Vuoi provarlo di persona prima di lasciare i contatti?</span>
+                <a href="index.html" target="_blank" rel="noopener" class="cta-link">Prova la demo ↗</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>Comanda — software di prenotazione per ristoranti e pizzerie</footer>
+
+    <div class="barra-sticky" id="barra-sticky">
+        <span>Vuoi Comanda nel tuo locale?</span>
+        <a href="#form-lead" onclick="document.getElementById('nome').focus()">Lascia i tuoi contatti</a>
+    </div>
 
     <script>
-        const API = 'https://ristoranteprova-backend.onrender.com';
+        const form = document.getElementById('form-lead');
+        const btn = document.getElementById('btn-invia');
+        const errore = document.getElementById('form-errore');
+        const successCard = document.getElementById('success-card');
 
-        function verificaPasswordDashboard() {
-            // Testo del prompt aggiornato per includere il suggerimento
-            const passwordInserita = prompt("Area Riservata.\nInserisci la password staff (es. 1234):");
-            if (passwordInserita) {
-                // Salva temporaneamente e reindirizza alla dashboard
-                sessionStorage.setItem('staff_key', passwordInserita);
-                window.location.href = "dashboard.html";
-            }
-        }
-
-        const MESI = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
-                      "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
-        const GIORNI_SETTIMANA = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
-
-        const oggiData = new Date();
-        let stato = {
-            anno: oggiData.getFullYear(),
-            mese: oggiData.getMonth() + 1,
-            giornoSelezionato: null
-        };
-
-        document.getElementById('area').addEventListener('change', () => {
-            stato.giornoSelezionato = null;
-            document.getElementById('data').value = '';
-            resettaOrari('Seleziona prima una data...');
-            caricaCalendario();
-        });
-
-        async function caricaCalendario() {
-            const area = document.getElementById('area').value;
-            const contenitore = document.getElementById('calendario');
-
-            if (!area) {
-                contenitore.innerHTML = '<p class="calendario-placeholder">Seleziona prima l\'area per vedere le date disponibili.</p>';
-                return;
-            }
-
-            contenitore.innerHTML = '<p class="calendario-placeholder">Caricamento date disponibili...</p>';
-
-            try {
-                const risposta = await fetch(`${API}/disponibilita-mese/?anno=${stato.anno}&mese=${stato.mese}&area=${encodeURIComponent(area)}`);
-                const dati = await risposta.json();
-                disegnaCalendario(dati.giorni);
-            } catch (errore) {
-                contenitore.innerHTML = '<p class="calendario-placeholder">Errore di connessione al server.</p>';
-            }
-        }
-
-        function disegnaCalendario(giorni) {
-            const contenitore = document.getElementById('calendario');
-            const meseCorrente = oggiData.getMonth() + 1;
-            const annoCorrente = oggiData.getFullYear();
-            const alMesePassato = (stato.anno < annoCorrente) || (stato.anno === annoCorrente && stato.mese <= meseCorrente);
-
-            const primoGiorno = new Date(stato.anno, stato.mese - 1, 1).getDay();
-            const offset = (primoGiorno + 6) % 7;
-
-            let html = `
-                <div class="calendario-header">
-                    <button type="button" class="nav-mese" id="mese-prec" ${alMesePassato ? 'disabled' : ''}>&#10094;</button>
-                    <span class="calendario-titolo">${MESI[stato.mese - 1]} ${stato.anno}</span>
-                    <button type="button" class="nav-mese" id="mese-succ">&#10095;</button>
-                </div>
-                <div class="calendario-griglia">
-                    ${GIORNI_SETTIMANA.map(g => `<div class="giorno-settimana">${g}</div>`).join('')}
-                    ${'<div></div>'.repeat(offset)}
-                    ${giorni.map(g => {
-                        const numero = parseInt(g.giorno.split('-')[2], 10);
-                        const selezionato = g.giorno === stato.giornoSelezionato ? 'selezionato' : '';
-                        const classe = g.disponibile ? `giorno-disponibile ${selezionato}` : 'giorno-non-disponibile';
-                        return `<button type="button" class="giorno ${classe}" data-giorno="${g.giorno}" ${g.disponibile ? '' : 'disabled'}>${numero}</button>`;
-                    }).join('')}
-                </div>
-                <div class="calendario-legenda">
-                    <span><i class="pallino disponibile"></i>Disponibile</span>
-                    <span><i class="pallino non-disponibile"></i>Completo</span>
-                </div>
-            `;
-
-            contenitore.innerHTML = html;
-
-            document.getElementById('mese-prec').addEventListener('click', () => cambiaMese(-1));
-            document.getElementById('mese-succ').addEventListener('click', () => cambiaMese(1));
-
-            contenitore.querySelectorAll('.giorno-disponibile').forEach(bottone => {
-                bottone.addEventListener('click', () => selezionaGiorno(bottone.dataset.giorno));
-            });
-        }
-
-        function cambiaMese(delta) {
-            stato.mese += delta;
-            if (stato.mese > 12) { stato.mese = 1; stato.anno++; }
-            if (stato.mese < 1) { stato.mese = 12; stato.anno--; }
-            stato.giornoSelezionato = null;
-            document.getElementById('data').value = '';
-            resettaOrari('Seleziona prima una data...');
-            caricaCalendario();
-        }
-
-        async function selezionaGiorno(giorno) {
-            stato.giornoSelezionato = giorno;
-            document.getElementById('data').value = giorno;
-            document.querySelectorAll('.giorno-disponibile').forEach(b => {
-                b.classList.toggle('selezionato', b.dataset.giorno === stato.giornoSelezionato);
-            });
-            await caricaOrari(giorno);
-        }
-
-        function resettaOrari(testoPlaceholder) {
-            const select = document.getElementById('ora');
-            select.innerHTML = `<option value="">${testoPlaceholder}</option>`;
-            select.disabled = true;
-        }
-
-        async function caricaOrari(giorno) {
-            const area = document.getElementById('area').value;
-            const select = document.getElementById('ora');
-            select.innerHTML = '<option value="">Caricamento orari...</option>';
-            select.disabled = true;
-
-            try {
-                const risposta = await fetch(`${API}/disponibilita-giorno/?data=${giorno}&area=${encodeURIComponent(area)}`);
-                const dati = await risposta.json();
-
-                if (dati.chiuso) {
-                    select.innerHTML = '<option value="">Prenotazioni online chiuse per stasera: chiamaci al locale</option>';
-                    select.disabled = true;
-                    return;
-                }
-
-                const pranzo = dati.slot.filter(s => s.ora < "16:00");
-                const cena = dati.slot.filter(s => s.ora >= "16:00");
-
-                function opzioni(lista) {
-                    return lista.map(s => {
-                        let etichetta = s.ora;
-                        if (!s.disponibile) etichetta += ' (completo)';
-                        else if (s.posti_rimasti <= 5) etichetta += ` (ultimi ${s.posti_rimasti} posti)`;
-                        return `<option value="${s.ora}" ${s.disponibile ? '' : 'disabled'}>${etichetta}</option>`;
-                    }).join('');
-                }
-
-                select.innerHTML = `
-                    <option value="" disabled selected>Seleziona un orario...</option>
-                    ${pranzo.length ? `<optgroup label="Pranzo">${opzioni(pranzo)}</optgroup>` : ''}
-                    ${cena.length ? `<optgroup label="Cena">${opzioni(cena)}</optgroup>` : ''}
-                `;
-                select.disabled = false;
-            } catch (errore) {
-                select.innerHTML = '<option value="">Errore di connessione al server.</option>';
-            }
-        }
-
-        document.getElementById('form-prenotazione').addEventListener('submit', async function (e) {
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
-            const divMessaggio = document.getElementById('messaggio');
+            errore.style.display = 'none';
+            btn.disabled = true;
+            btn.textContent = 'Invio in corso...';
 
-            if (!document.getElementById('data').value) {
-                divMessaggio.className = 'messaggio errore';
-                divMessaggio.innerText = 'Seleziona una data dal calendario.';
-                return;
-            }
-            if (!document.getElementById('ora').value) {
-                divMessaggio.className = 'messaggio errore';
-                divMessaggio.innerText = 'Seleziona un orario disponibile.';
-                return;
-            }
-
-            const dati = {
-                nome_cliente: document.getElementById('nome').value,
+            const payload = {
+                nome: document.getElementById('nome').value,
+                nome_locale: document.getElementById('locale').value,
                 telefono: document.getElementById('telefono').value,
-                data_prenotazione: document.getElementById('data').value,
-                ora_prenotazione: document.getElementById('ora').value,
-                numero_persone: parseInt(document.getElementById('coperti').value),
-                area: document.getElementById('area').value,
-                note: document.getElementById('note').value
+                email: document.getElementById('email').value,
+                _subject: 'Nuovo lead - Comanda (landing ristoratori)'
             };
 
             try {
-                const risposta = await fetch(`${API}/prenotazioni/`, {
+                const risposta = await fetch('https://formsubmit.co/ajax/salasmart004@gmail.com', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dati)
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
 
-                const risultato = await risposta.json();
+                if (!risposta.ok) throw new Error('Invio non riuscito');
 
-                if (risposta.ok) {
-                    divMessaggio.className = 'messaggio successo';
-                    divMessaggio.innerText = 'Prenotazione confermata con successo! Ti aspettiamo.';
-                    this.reset();
-                    stato.giornoSelezionato = null;
-                    resettaOrari('Seleziona prima una data...');
-                    caricaCalendario();
-                } else {
-                    divMessaggio.className = 'messaggio errore';
-                    divMessaggio.innerText = risultato.detail;
-                    caricaCalendario();
-                    if (stato.giornoSelezionato) caricaOrari(stato.giornoSelezionato);
+                if (typeof fbq === 'function') {
+                    fbq('track', 'Lead');
                 }
-            } catch (errore) {
-                divMessaggio.className = 'messaggio errore';
-                divMessaggio.innerText = 'Errore di connessione al server.';
+
+                form.style.display = 'none';
+                successCard.style.display = 'block';
+                document.getElementById('barra-sticky').style.display = 'none';
+            } catch (err) {
+                errore.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'Chiamatemi per la prova';
             }
         });
     </script>
-    
-    <div class="barra-demo" id="barra-demo">
-        <span>Stai provando la demo di Comanda — vuoi attivarlo nel tuo locale?</span>
-        <a href="index.html#prova">Lascia i contatti</a>
-        <button type="button" onclick="document.getElementById('barra-demo').style.display='none'" aria-label="Chiudi">×</button>
-    </div>
-
 </body>
 </html>
