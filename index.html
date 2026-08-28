@@ -4,36 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comanda — Prenotazioni senza telefono, per ristoranti e pizzerie</title>
+    <meta name="description" content="Comanda raccoglie le prenotazioni dei ristoranti online 24 ore su 24: niente più doppie prenotazioni, niente più telefono che squilla, niente più note su allergie perse. Prova gratuita di un mese.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Microsoft Clarity Code -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "y8hjrtwb7z");
-    </script>
-
-    <!-- Meta Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1588215492983251');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1588215492983251&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
+    
+    <!-- Font caricato in modo non-bloccante -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
+          onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    </noscript>
 
     <style>
         :root {
@@ -58,7 +38,7 @@
             color: var(--ink);
             font-family: 'Inter', sans-serif;
             line-height: 1.5;
-            padding-bottom: 74px; /* spazio per la barra sticky */
+            padding-bottom: 74px;
         }
 
         .eyebrow {
@@ -70,10 +50,9 @@
             font-weight: 600;
         }
         .eyebrow.on-ink { color: #d99a8f; }
-        h1, h2, h3 { font-family: 'Fraunces', serif; margin: 0; }
+        h1, h2, h3 { font-family: 'Fraunces', Georgia, 'Times New Roman', serif; margin: 0; }
         a { color: inherit; }
 
-        /* ---------- HERO ---------- */
         .hero {
             background: var(--ink);
             color: var(--paper);
@@ -118,7 +97,6 @@
         }
         .prova-mini:hover { color: var(--paper); }
 
-        /* ---------- FORM (nell'hero, sempre visibile) ---------- */
         .lead-card {
             background: var(--paper);
             color: var(--ink);
@@ -229,7 +207,6 @@
         }
         .success-card a:hover { background: var(--ink); color: var(--paper); }
 
-        /* ---------- VOCI DI COMANDA ---------- */
         .section { padding: 64px 24px; }
         .section-inner { max-width: 900px; margin: 0 auto; }
         .section-head { max-width: 56ch; margin-bottom: 40px; }
@@ -260,7 +237,6 @@
             white-space: nowrap;
         }
 
-        /* ---------- RIPRESA CTA A META PAGINA ---------- */
         .ripresa-cta {
             background: var(--paper-dim);
             border-radius: 8px;
@@ -296,7 +272,6 @@
             color: var(--fog);
         }
 
-        /* ---------- BARRA STICKY ---------- */
         .barra-sticky {
             position: fixed;
             left: 0; right: 0; bottom: 0;
@@ -326,7 +301,7 @@
         }
         .barra-sticky a:hover { background: var(--stamp-dark); }
 
-        /* ---------- FRECCIA SCROLL MOBILE ---------- */
+        /* ---------- RIENTRO FRECCIA SCROLL MOBILE ---------- */
         .scroll-indicator {
             display: none;
             flex-direction: column;
@@ -352,13 +327,13 @@
             .hero-inner { grid-template-columns: 1fr; }
             .voce { grid-template-columns: 1fr; gap: 4px; }
             .voce-esito { justify-self: start; }
-            .scroll-indicator { display: flex; }
+            .scroll-indicator { display: flex; } /* Rende visibile la freccia su mobile */
         }
     </style>
 </head>
 <body>
 
-    <section class="hero">
+    <section class="hero" id="prova">
         <div class="hero-inner">
             <div>
                 <p class="eyebrow on-ink">Per ristoranti e pizzerie</p>
@@ -401,7 +376,7 @@
                 </div>
             </div>
             
-            <!-- FRECCIA ANIMATA (Visibile solo su mobile sotto il form) -->
+            <!-- REINSERIMENTO FRECCIA ANIMATA (Visibile solo su mobile sotto il form) -->
             <div class="scroll-indicator">
                 <span>Scorri per i dettagli</span>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
@@ -445,6 +420,33 @@
         <span>Vuoi Comanda nel tuo locale?</span>
         <a href="#form-lead" onclick="document.getElementById('nome').focus()">Lascia i tuoi contatti</a>
     </div>
+
+    <!-- Microsoft Clarity Code -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "y8hjrtwb7z");
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1588215492983251');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1588215492983251&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
 
     <script>
         const form = document.getElementById('form-lead');
